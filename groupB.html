@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explainable Network Verification Test - User Study</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -4634,8 +4633,6 @@ private_ips_3
 
         // Initialize test
         function initTest() {
-            // Initialize EmailJS
-            emailjs.init('YOUR_PUBLIC_KEY'); // Replace with actual public key
             
             updateUITexts(); // Initialize UI texts
             showStartScreen(); // Show start screen first
@@ -5763,49 +5760,6 @@ private_ips_3
             }
         }
 
-        function downloadTestResults(testData) {
-            // 生成报告内容
-            const reportContent = generateReportContent(testData);
-            
-            // 创建并下载文件
-            const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `user-study-results-${testData.userGroup}-${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }
-
-        function generateReportContent(testData) {
-            let content = `Network Verification User Study Results\n`;
-            content += `=====================================\n\n`;
-            content += `Test Date: ${new Date(testData.timestamp).toLocaleString()}\n`;
-            content += `User Group: ${testData.userGroup}\n`;
-            content += `Language: ${testData.language}\n`;
-            content += `Total Time: ${testData.totalTime}\n`;
-            content += `Score: ${testData.score}/${testData.totalQuestions} (${Math.round(testData.score/testData.totalQuestions*100)}%)\n\n`;
-            
-            content += `Question Times:\n`;
-            testData.questionTimes.forEach((time, index) => {
-                const isCorrect = checkAnswer(testData.answers[index], index);
-                content += `Q${index + 1}: ${time} (${isCorrect ? 'Correct' : 'Incorrect'})\n`;
-            });
-            
-            content += `\nUser Answers:\n`;
-            testData.answers.forEach((answer, index) => {
-                content += `Q${index + 1}: ${answer.join(', ')}\n`;
-            });
-            
-            content += `\nSurvey Responses:\n`;
-            content += `Question 1: ${testData.survey.question1}\n`;
-            content += `Question 2: ${testData.survey.question2}\n`;
-            
-            content += `\n--- End of Report ---\n`;
-            return content;
-        }
 
         function submitToNetlify(testData) {
             // 使用fetch API提交到Netlify Forms，避免页面跳转
@@ -5846,51 +5800,6 @@ private_ips_3
             });
         }
 
-        function sendSurveyEmail(testData) {
-            // 构建邮件内容
-            const emailContent = buildEmailContent(testData);
-            
-            // 使用EmailJS发送邮件
-            emailjs.send('service_id', 'template_id', {
-                to_email: 'linyx2025@shanghaitech.edu.cn',
-                subject: `网络验证测试结果 - ${testData.userGroup}组`,
-                message: emailContent
-            })
-            .then(() => {
-                showSurveySuccess();
-            })
-            .catch((error) => {
-                console.error('邮件发送失败:', error);
-                showSurveyError();
-            });
-        }
-
-        function buildEmailContent(testData) {
-            const t = texts[currentLanguage];
-            let content = `网络验证测试结果报告\n\n`;
-            content += `测试时间: ${testData.timestamp}\n`;
-            content += `测试组别: ${testData.userGroup}组\n`;
-            content += `测试语言: ${testData.language === 'zh' ? '中文' : 'English'}\n`;
-            content += `总用时: ${testData.totalTime}\n`;
-            content += `得分: ${testData.score}/${testData.totalQuestions}\n\n`;
-            
-            content += `各题用时:\n`;
-            testData.questionTimes.forEach((time, index) => {
-                content += `问题${index + 1}: ${time}\n`;
-            });
-            
-            content += `\n用户答案:\n`;
-            testData.answers.forEach((answer, index) => {
-                content += `问题${index + 1}: ${answer.join(', ')}\n`;
-            });
-            
-            content += `\n问卷调查:\n`;
-            content += `问题1: ${testData.survey.question1}\n`;
-            content += `问题2: ${testData.survey.question2}\n`;
-            // 星级评分已移除
-            
-            return content;
-        }
 
         function showSurveySuccess() {
             const submitBtn = document.querySelector('.submit-survey-btn');
