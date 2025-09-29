@@ -5718,7 +5718,7 @@ private_ips_3
             
             // Disable button to prevent duplicate submission
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Processing...';
+            submitBtn.textContent = 'Completed';
             
             // Collect all test data
             const testData = {
@@ -5736,105 +5736,8 @@ private_ips_3
                 }
             };
             
-            // 1. 下载文件给用户
-            downloadTestResults(testData);
-            
-            // 2. 同时发送到Netlify Forms
-            submitToNetlify(testData);
-            
-            // 3. 显示完成提示
-            setTimeout(() => {
-                showSurveyComplete(testData);
-            }, 2000);
-        }
-
-        function downloadTestResults(testData) {
-            // 生成报告内容
-            const reportContent = generateReportContent(testData);
-            
-            // 创建并下载文件
-            const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `user-study-results-${testData.userGroup}-${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }
-
-        function generateReportContent(testData) {
-            let content = `Network Verification User Study Results\n`;
-            content += `=====================================\n\n`;
-            content += `Test Date: ${new Date(testData.timestamp).toLocaleString()}\n`;
-            content += `User Group: ${testData.userGroup}\n`;
-            content += `Language: ${testData.language}\n`;
-            content += `Total Time: ${testData.totalTime}\n`;
-            content += `Score: ${testData.score}/${testData.totalQuestions} (${Math.round(testData.score/testData.totalQuestions*100)}%)\n\n`;
-            
-            content += `Question Times:\n`;
-            testData.questionTimes.forEach((time, index) => {
-                const isCorrect = checkAnswer(testData.answers[index], index);
-                content += `Q${index + 1}: ${time} (${isCorrect ? 'Correct' : 'Incorrect'})\n`;
-            });
-            
-            content += `\nUser Answers:\n`;
-            testData.answers.forEach((answer, index) => {
-                content += `Q${index + 1}: ${answer.join(', ')}\n`;
-            });
-            
-            content += `\nSurvey Responses:\n`;
-            content += `Question 1: ${testData.survey.question1}\n`;
-            content += `Question 2: ${testData.survey.question2}\n`;
-            
-            content += `\n--- End of Report ---\n`;
-            return content;
-        }
-
-        function submitToNetlify(testData) {
-            // 创建隐藏表单并添加netlify属性
-            const form = document.createElement('form');
-            form.name = 'user-study-results';
-            form.setAttribute('netlify', '');
-            form.setAttribute('netlify-honeypot', 'bot-field');
-            form.method = 'POST';
-            form.action = '/';
-            form.style.display = 'none';
-            
-            // 添加数据字段
-            const fields = {
-                'form-name': 'user-study-results',
-                'timestamp': testData.timestamp,
-                'userGroup': testData.userGroup,
-                'language': testData.language,
-                'totalTime': testData.totalTime,
-                'score': testData.score,
-                'totalQuestions': testData.totalQuestions,
-                'questionTimes': JSON.stringify(testData.questionTimes),
-                'answers': JSON.stringify(testData.answers),
-                'surveyQ1': testData.survey.question1,
-                'surveyQ2': testData.survey.question2
-            };
-            
-            // 创建隐藏输入字段
-            Object.keys(fields).forEach(key => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = fields[key];
-                form.appendChild(input);
-            });
-            
-            // 添加honeypot字段（防止垃圾邮件）
-            const honeypot = document.createElement('input');
-            honeypot.type = 'hidden';
-            honeypot.name = 'bot-field';
-            form.appendChild(honeypot);
-            
-            // 提交表单
-            document.body.appendChild(form);
-            form.submit();
+            // 显示完成提示
+            showSurveyComplete(testData);
         }
 
         function sendSurveyEmail(testData) {
