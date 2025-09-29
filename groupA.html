@@ -5761,44 +5761,38 @@ private_ips_3
         }
 
         function submitToNetlify(testData) {
-            // 创建隐藏表单
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/';
-            form.style.display = 'none';
+            // 使用fetch API提交到Netlify Forms
+            const formData = new FormData();
+            formData.append('form-name', 'user-study-results');
+            formData.append('timestamp', testData.timestamp);
+            formData.append('userGroup', testData.userGroup);
+            formData.append('language', testData.language);
+            formData.append('totalTime', testData.totalTime);
+            formData.append('score', testData.score);
+            formData.append('totalQuestions', testData.totalQuestions);
+            formData.append('questionTimes', JSON.stringify(testData.questionTimes));
+            formData.append('answers', JSON.stringify(testData.answers));
+            formData.append('surveyQ1', testData.survey.question1);
+            formData.append('surveyQ2', testData.survey.question2);
             
-            // 添加数据字段
-            const fields = {
-                'form-name': 'user-study-results',
-                'timestamp': testData.timestamp,
-                'userGroup': testData.userGroup,
-                'language': testData.language,
-                'totalTime': testData.totalTime,
-                'score': testData.score,
-                'totalQuestions': testData.totalQuestions,
-                'questionTimes': JSON.stringify(testData.questionTimes),
-                'answers': JSON.stringify(testData.answers),
-                'surveyQ1': testData.survey.question1,
-                'surveyQ2': testData.survey.question2
-            };
-            
-            // 创建隐藏输入字段
-            Object.keys(fields).forEach(key => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = fields[key];
-                form.appendChild(input);
+            // 提交数据
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('数据提交成功');
+                    showSurveyComplete(testData);
+                } else {
+                    console.error('提交失败:', response.status);
+                    showSurveyComplete(testData); // 即使失败也显示完成页面
+                }
+            })
+            .catch(error => {
+                console.error('提交错误:', error);
+                showSurveyComplete(testData); // 即使失败也显示完成页面
             });
-            
-            // 提交表单
-            document.body.appendChild(form);
-            form.submit();
-            
-            // 显示成功消息
-            setTimeout(() => {
-                showSurveyComplete(testData);
-            }, 1000);
         }
 
         function sendSurveyEmail(testData) {
