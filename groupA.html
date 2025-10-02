@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explainable Network Verification Test - User Study</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1703,17 +1704,23 @@ network_192_168_0_0
 17  !
 18  !!! Outbound BGP route policy on R2 applied to updates sent to R3. !!!
 19  route-map R2_OUT_TO_R3 permit 10
-20   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost)
-21  !
+20   match community 500200
+21   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost)
 22  !
-23  !!! Prefix-list Definitions on R2. !!!
-24  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+23  route-map R2_OUT_TO_R3 permit 100
+24   match ip address prefix-list default_ips
 25  !
-26  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
-27  !
-28  !
-29  !!! Community-list Definitions on R2. !!!
-30  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
+26  !
+27  !!! Prefix-list Definitions on R2. !!!
+28  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+29  !
+30  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
+31  !
+32  !
+33  !!! Community-list Definitions on R2. !!!
+34  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)
+35  !
+36  [ip community-list](Config_r2_CommunityList_500200__Line1) 500200 [permit](Config_r2_CommunityList_500200__Line1__exact_community_500_200_action) [500:200](Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
  2  route-map R3_IN_FROM_Customer deny 10
  3   match ip address prefix-list private_ips_1
  4  !
@@ -1725,7 +1732,7 @@ network_192_168_0_0
 10  [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
 11  !
 12  [ip prefix-list](Config_r3_RouteFilterList_private_ips_1__Line1) private_ips_1 seq 5 [permit](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action) [192.168.0.0/12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip) [ge 12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start)`,
-                question: `As part of routine maintenance, the network operator wants to clean up the export prefix-list at router R1 by removing unused entries. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that can be safely removed without affecting the specification Customer Reachability.
+                question: `As part of routine maintenance, the network operator wants to clean up the export prefix-list at router R1 by removing unused entries. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that can be safely removed without affecting the verified specification Customer Reachability.
 
 option1: [yes]
 \`\`\`diff
@@ -1793,14 +1800,39 @@ Subspecs (1):
   1. (= Config_r1_RoutingPolicy_R1_IN_FROM_ISP1__Line1__add_community_400_100_community true)
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost 1)
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
+Subspecs (1):
+  1. empty
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action
@@ -1818,17 +1850,17 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -1893,21 +1925,6 @@ Subspecs (1):
   1. (= Config_r2_CommunityList_400100__Line1__exact_community_400_100_action true)
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. (= ((_ extract 31 8) |0_dst-ip|) #xc00002) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__mask))) (bvnot (bvor (bvnot Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip) (bvnot Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__mask))))
@@ -1923,12 +1940,12 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -1970,12 +1987,27 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -2008,11 +2040,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. (= Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community true) AND (= Config_r2_CommunityList_400100__Line1__exact_community_400_100_action true)
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
 --------------------------------------------------`,
                 configSubspecTrans: `Config-Level Subspecs
 ====================
@@ -2057,14 +2084,39 @@ Subspecs (1):
   1. community = 400:100
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. prepending AS-path length = 1
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
+Subspecs (1):
+  1. empty
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action
@@ -2082,17 +2134,17 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -2157,21 +2209,6 @@ Subspecs (1):
   1. permit
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. network prefix cover 192.0.2.0/24
@@ -2187,12 +2224,12 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -2234,12 +2271,27 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -2272,11 +2324,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. permit AND community = 400:100
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
 --------------------------------------------------`,
                 highlight: `R1_IN_FROM_ISP1
 R1_OUT_TO_ISP1
@@ -2351,17 +2398,23 @@ private_ips_3
 17  !
 18  !!! Outbound BGP route policy on R2 applied to updates sent to R3. !!!
 19  route-map R2_OUT_TO_R3 permit 10
-20   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost)
-21  !
+20   match community 500200
+21   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost)
 22  !
-23  !!! Prefix-list Definitions on R2. !!!
-24  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+23  route-map R2_OUT_TO_R3 permit 100
+24   match ip address prefix-list default_ips
 25  !
-26  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
-27  !
-28  !
-29  !!! Community-list Definitions on R2. !!!
-30  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
+26  !
+27  !!! Prefix-list Definitions on R2. !!!
+28  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+29  !
+30  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
+31  !
+32  !
+33  !!! Community-list Definitions on R2. !!!
+34  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)
+35  !
+36  [ip community-list](Config_r2_CommunityList_500200__Line1) 500200 [permit](Config_r2_CommunityList_500200__Line1__exact_community_500_200_action) [500:200](Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
  2  route-map R3_IN_FROM_Customer deny 10
  3   match ip address prefix-list private_ips_1
  4  !
@@ -2373,7 +2426,7 @@ private_ips_3
 10  [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
 11  !
 12  [ip prefix-list](Config_r3_RouteFilterList_private_ips_1__Line1) private_ips_1 seq 5 [permit](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action) [192.168.0.0/12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip) [ge 12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start)`,
-                question: `Originally, the specification No Transit forbids transit traffic from ISP1 to ISP2. Suppose that the network operator wants to update the specification to allow the routes learned from ISP1 to be propagated to ISP2. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that, if removed or modified, may affect the updated specification.
+                question: `Originally, the specification No Transit forbids transit traffic between ISP1 and ISP2. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that, if removed or modified, may break the verified specification No Transit.
 
 option1: [yes]
 \`\`\`diff
@@ -2385,14 +2438,14 @@ option1: [yes]
 
 option2: [yes]
 \`\`\`diff
-  @@ R2 Configuration 30,30 @@
+  @@ R2 Configuration 34,34 @@
 - ip community-list 400100 permit 400:100
 + ip community-list 400100 deny 400:100
 \`\`\`
 
 option3: [yes]
 \`\`\`diff
-  @@ R2 Configuration 30,30 @@
+  @@ R2 Configuration 34,34 @@
 - ip community-list 400100 permit 400:100
 + ip community-list 400100 permit 500:200
 \`\`\``,
@@ -2444,14 +2497,39 @@ Subspecs (1):
   1. (= Config_r1_RoutingPolicy_R1_IN_FROM_ISP1__Line1__add_community_400_100_community true)
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost 1)
+  1. (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community true)
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_action true)
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
+Subspecs (1):
+  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost 1)
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action
@@ -2469,54 +2547,54 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__prefix_range_start
 Subspecs (1):
-  1. empty
+  1. (= Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__prefix_range_start 24)
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action
 Subspecs (1):
-  1. empty
+  1. (= Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action true)
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_end
 Subspecs (1):
-  1. empty
+  1. (<= 24 Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_end)
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start
 Subspecs (1):
-  1. empty
+  1. (>= 24 Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
 --------------------------------------------------
 
 Config Variable: Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1__add_community_500_200_community
 Subspecs (1):
-  1. empty
+  1. (= Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1__add_community_500_200_community true)
 --------------------------------------------------
 
 Config Variable: Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. empty
+  1. (= Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community true)
 --------------------------------------------------
 
 Config Variable: Config_r1_CommunityList_500200__Line1__exact_community_500_200_action
 Subspecs (1):
-  1. empty
+  1. (= Config_r1_CommunityList_500200__Line1__exact_community_500_200_action true)
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action
@@ -2544,21 +2622,6 @@ Subspecs (1):
   1. (= Config_r2_CommunityList_400100__Line1__exact_community_400_100_action true)
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. (= ((_ extract 31 8) |0_dst-ip|) #xc00002) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__mask))) (bvnot (bvor (bvnot Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip) (bvnot Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__mask))))
@@ -2574,24 +2637,24 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__ip
 Subspecs (1):
-  1. empty
+  1. (= ((_ extract 31 8) |0_dst-ip|) #xc63364) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__mask))) (bvnot (bvor (bvnot Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__ip) (bvnot Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__mask))))
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip
 Subspecs (1):
-  1. empty
+  1. (= ((_ extract 31 8) |0_dst-ip|) #xc63364) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__mask))) (bvnot (bvor (bvnot Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) (bvnot Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__mask))))
 --------------------------------------------------`,
                 lineSubspec: `Line-Level Subspecs
 ==================
@@ -2621,34 +2684,49 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community true) AND (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_action true)
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost 1)
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
 Line Group: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1
 Subspecs (1):
-  1. empty
+  1. (= ((_ extract 31 8) |0_dst-ip|) #xc63364) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__mask))) (bvnot (bvor (bvnot Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__ip) (bvnot Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__mask)))) AND (= Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__prefix_range_start 24)
 --------------------------------------------------
 
 Line Group: Config_r2_RouteFilterList_isp2_network__Line1
 Subspecs (1):
-  1. empty
+  1. (= ((_ extract 31 8) |0_dst-ip|) #xc63364) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__mask))) (bvnot (bvor (bvnot Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) (bvnot Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__mask)))) AND (<= 24 Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_end) AND (>= 24 Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start) AND (= Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action true)
 --------------------------------------------------
 
 Line Group: Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1
 Subspecs (1):
-  1. empty
+  1. (= Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1__add_community_500_200_community true)
 --------------------------------------------------
 
 Line Group: Config_r1_CommunityList_500200__Line1
 Subspecs (1):
-  1. empty
+  1. (= Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community true) AND (= Config_r1_CommunityList_500200__Line1__exact_community_500_200_action true)
 --------------------------------------------------
 
 Line Group: Config_r1_RouteFilterList_default_ips__Line1
@@ -2659,11 +2737,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. (= Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community true) AND (= Config_r2_CommunityList_400100__Line1__exact_community_400_100_action true)
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
 --------------------------------------------------`,
                 configSubspecTrans: `Config-Level Subspecs
 ====================
@@ -2708,12 +2781,37 @@ Subspecs (1):
   1. community = 400:100
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
+Subspecs (1):
+  1. community = 500:200
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. permit
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
 Subspecs (1):
   1. prepending AS-path length = 1
 --------------------------------------------------
@@ -2733,54 +2831,54 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__prefix_range_start
 Subspecs (1):
-  1. empty
+  1. network prefix ge range = 24~24
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action
 Subspecs (1):
-  1. empty
+  1. permit
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_end
 Subspecs (1):
-  1. empty
+  1. prefix le range = 24~32
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start
 Subspecs (1):
-  1. empty
+  1. prefix ge range = 0~24
 --------------------------------------------------
 
 Config Variable: Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1__add_community_500_200_community
 Subspecs (1):
-  1. empty
+  1. community = 500:200
 --------------------------------------------------
 
 Config Variable: Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. empty
+  1. community = 500:200
 --------------------------------------------------
 
 Config Variable: Config_r1_CommunityList_500200__Line1__exact_community_500_200_action
 Subspecs (1):
-  1. empty
+  1. permit
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action
@@ -2808,21 +2906,6 @@ Subspecs (1):
   1. permit
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. network prefix cover 192.0.2.0/24
@@ -2838,24 +2921,24 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__ip
 Subspecs (1):
-  1. empty
+  1. network prefix cover 198.51.100.0/24
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip
 Subspecs (1):
-  1. empty
+  1. prefix cover 198.51.100.0/24
 --------------------------------------------------`,
                 lineSubspecTrans: `Line-Level Subspecs
 ==================
@@ -2867,7 +2950,7 @@ Subspecs (1):
 
 Line Group: Config_r1_RouteFilterList_isp1_network__Line1
 Subspecs (1):
-  1. permit AND perfix cover 192.0.2.0/24 AND prefix ge range = 0~24 AND prefix le range = 24~32
+  1. permit AND prefix cover 192.0.2.0/24 AND prefix ge range = 0~24 AND prefix le range = 24~32
 --------------------------------------------------
 
 Line Group: Config_r1_RouteFilterList_isp1_network__Line2
@@ -2885,34 +2968,49 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. permit AND community = 500:200
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. prepending AS-path length = 1
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
 Line Group: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1
 Subspecs (1):
-  1. empty
+  1. network prefix cover 198.51.100.0/24 AND network prefix ge range = 24~24
 --------------------------------------------------
 
 Line Group: Config_r2_RouteFilterList_isp2_network__Line1
 Subspecs (1):
-  1. empty
+  1. permit AND prefix cover 198.51.100.0/24 AND prefix ge range = 0~24 AND prefix le range = 24~32
 --------------------------------------------------
 
 Line Group: Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1
 Subspecs (1):
-  1. empty
+  1. community = 500:200
 --------------------------------------------------
 
 Line Group: Config_r1_CommunityList_500200__Line1
 Subspecs (1):
-  1. empty
+  1. permit AND community = 500:200
 --------------------------------------------------
 
 Line Group: Config_r1_RouteFilterList_default_ips__Line1
@@ -2923,11 +3021,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. permit AND community = 400:100
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
 --------------------------------------------------`,
                 highlight: `R1_IN_FROM_ISP1
 R1_OUT_TO_ISP1
@@ -3002,17 +3095,23 @@ private_ips_3
 17  !
 18  !!! Outbound BGP route policy on R2 applied to updates sent to R3. !!!
 19  route-map R2_OUT_TO_R3 permit 10
-20   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost)
-21  !
+20   match community 500200
+21   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost)
 22  !
-23  !!! Prefix-list Definitions on R2. !!!
-24  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+23  route-map R2_OUT_TO_R3 permit 100
+24   match ip address prefix-list default_ips
 25  !
-26  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
-27  !
-28  !
-29  !!! Community-list Definitions on R2. !!!
-30  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
+26  !
+27  !!! Prefix-list Definitions on R2. !!!
+28  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+29  !
+30  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
+31  !
+32  !
+33  !!! Community-list Definitions on R2. !!!
+34  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)
+35  !
+36  [ip community-list](Config_r2_CommunityList_500200__Line1) 500200 [permit](Config_r2_CommunityList_500200__Line1__exact_community_500_200_action) [500:200](Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
  2  route-map R3_IN_FROM_Customer deny 10
  3   match ip address prefix-list private_ips_1
  4  !
@@ -3024,27 +3123,25 @@ private_ips_3
 10  [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
 11  !
 12  [ip prefix-list](Config_r3_RouteFilterList_private_ips_1__Line1) private_ips_1 seq 5 [permit](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action) [192.168.0.0/12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip) [ge 12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start)`,
-                question: `If a network operator intends to modify the route-map R2_OUT_TO_R3 to support additional specification(s), we seek to determine whether the modified R2_OUT_TO_R3 still satisfies the previously original verified specification ECMP reachability. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that, if modified, could preserve the original specification ECMP Reachability.
+                question: `If a network operator intends to modify the route-map R2_OUT_TO_R3 to support additional specification(s), we seek to determine whether the modified R2_OUT_TO_R3 still satisfies the previously original verified specification ECMP reachability. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that, if modified, could preserve the verified specification ECMP Reachability.
 
 option1: [no]
 \`\`\`diff
-  @@ R2 Configuration 19,20 @@
-  route-map R2_OUT_TO_R3 permit 10
--  set as-path prepend 200
+  @@ R2 Configuration 36,36 @@
+- ip community-list 500200 permit 500:200
++ ip community-list 500200 permit 400:100
 \`\`\`
 
 option2: [no]
 \`\`\`diff
-  @@ R2 Configuration 19,20 @@
-  route-map R2_OUT_TO_R3 permit 10
+  @@ R2 Configuration 21,21 @@
 -  set as-path prepend 200
-+  set as-path prepend 200 200
++  set as-path prepend 200 100
 \`\`\`
 
 option3: [yes]
 \`\`\`diff
-  @@ R2 Configuration 19,20 @@
-  route-map R2_OUT_TO_R3 permit 10
+  @@ R2 Configuration 21,21 @@
 -  set as-path prepend 200
 +  set as-path prepend 100
 \`\`\``,
@@ -3092,14 +3189,39 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost 1)
+  1. (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community true)
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_action true)
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
+Subspecs (1):
+  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost 1)
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action
@@ -3117,17 +3239,17 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3192,21 +3314,6 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. empty
@@ -3222,12 +3329,12 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3269,12 +3376,27 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community true) AND (= Config_r2_CommunityList_500200__Line1__exact_community_500_200_action true)
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. (= Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost 1)
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3305,11 +3427,6 @@ Subspecs (1):
 --------------------------------------------------
 
 Line Group: Config_r2_CommunityList_400100__Line1
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------`,
@@ -3356,12 +3473,37 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
+Subspecs (1):
+  1. community = 500:200
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. permit
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
 Subspecs (1):
   1. prepending AS-path length = 1
 --------------------------------------------------
@@ -3381,17 +3523,17 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3456,21 +3598,6 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. empty
@@ -3486,12 +3613,12 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3533,12 +3660,27 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. permit AND community = 500:200
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. prepending AS-path length = 1
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3571,11 +3713,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. empty
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
 --------------------------------------------------`,
                 highlight: `R1_IN_FROM_ISP1
 R1_OUT_TO_ISP1
@@ -3597,7 +3734,7 @@ private_ips_3
                 {
                 networkDesc: `As shown in above network topology, the network consists of two ISP peers (ISP1 and ISP2), one customer (Customer), and three routers (R1–R3). Each edge denotes an established eBGP peer session between the connected routers, and route-maps are applied on selected sessions to manipulate route attributes and route selection. 
 (Green lines represent the route propagation paths that need to be permitted. Red lines represent the route propagation paths that need to be prohibited. Multiple green lines represent the ECMP (equal-cost multipath) route propagation paths that need to be permitted.)`,
-                spec: `Private Prefix Filtering: The private IP address blocks (e.g., 192.168.0.0/16), originated from Customer, must not be advertised to the router R3. 
+                spec: `Private Prefix Filtering: Routes 192.168.128.0/24 and 192.168.129.0/24, originated from the Customer within the private block 192.168.0.0/16, must not be advertised to router R3. 
 <br>(The red line represents the route propagation path that need to be prohibited.)
 <br>
 <br><em>Each edge denotes an established eBGP peer session between the connected routers, and route-maps are applied on selected sessions to manipulate route attributes and route selection.</em>
@@ -3650,17 +3787,23 @@ private_ips_3
 17  !
 18  !!! Outbound BGP route policy on R2 applied to updates sent to R3. !!!
 19  route-map R2_OUT_TO_R3 permit 10
-20   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost)
-21  !
+20   match community 500200
+21   set as-path prepend [200](Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost)
 22  !
-23  !!! Prefix-list Definitions on R2. !!!
-24  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+23  route-map R2_OUT_TO_R3 permit 100
+24   match ip address prefix-list default_ips
 25  !
-26  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
-27  !
-28  !
-29  !!! Community-list Definitions on R2. !!!
-30  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
+26  !
+27  !!! Prefix-list Definitions on R2. !!!
+28  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
+29  !
+30  [ip prefix-list](Config_r2_RouteFilterList_isp2_network__Line1) isp2_network seq 5 [permit](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__action) [198.51.100.0/24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip) [ge 24](Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__prefix_range_start)
+31  !
+32  !
+33  !!! Community-list Definitions on R2. !!!
+34  [ip community-list](Config_r2_CommunityList_400100__Line1) 400100 [permit](Config_r2_CommunityList_400100__Line1__exact_community_400_100_action) [400:100](Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community)
+35  !
+36  [ip community-list](Config_r2_CommunityList_500200__Line1) 500200 [permit](Config_r2_CommunityList_500200__Line1__exact_community_500_200_action) [500:200](Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community)\n\n=== R3 CONFIG ===\n\n<br>&nbsp;1  !!! Inbound BGP route policy on R3 for routes learned from Customer. !!!
  2  route-map R3_IN_FROM_Customer deny 10
  3   match ip address prefix-list private_ips_1
  4  !
@@ -3671,27 +3814,28 @@ private_ips_3
  9  !!! Prefix-list Definitions on R3. !!!
 10  [ip prefix-list](Config_r2_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) 0.0.0.0/0 [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
 11  !
-12  [ip prefix-list](Config_r3_RouteFilterList_private_ips_1__Line1) private_ips_1 seq 5 [permit](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action) [192.168.0.0/12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip) [ge 12](Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start)`,
-                question: `The specification Private Prefix Filtering block all private IP address blocks originated from Customer. All following lines satisfy the specification. <br><br>Which one is <span style="color: red;">the most precise</span> in block private IP address blocks?
+12  [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5 [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)`,
+                question: `The specification Private Prefix Filtering blocks the Customer subnets 192.168.128.0/24 and 192.168.129.0/24, originated from the private block 192.168.0.0/16. These subnets must not be advertised to router R3. <br><br>Check the box next to <span style="color: red;">any line(s)</span> that, if modified, could preserve the verified specification Private Prefix Filtering.
 
 option1: [no]
 \`\`\`
   @@ R3 Configuration 12,12 @@
-ip prefix-list private_ips_1 seq 5 permit 192.168.0.0/12 ge 12
+- ip prefix-list private_ips seq 5 permit 192.168.0.0/16 ge 16 le 32
++ ip prefix-list private_ips seq 5 permit 192.168.128.0/24 ge 24 le 32
 \`\`\`
 
-option2: [no]
+option2: [yes]
 \`\`\`diff
   @@ R3 Configuration 12,12 @@
-- ip prefix-list private_ips_1 seq 5 permit 192.168.0.0/12 ge 12
-+ ip prefix-list private_ips_1 seq 5 permit 192.168.0.0/12 ge 16
+- ip prefix-list private_ips seq 5 permit 192.168.0.0/16 ge 16 le 32
++ ip prefix-list private_ips seq 5 permit 192.168.128.0/23 ge 24 le 28
 \`\`\`
 
 option3: [yes]
 \`\`\`diff
   @@ R3 Configuration 12,12 @@
-- ip prefix-list private_ips_1 seq 5 permit 192.168.0.0/12 ge 12
-+ ip prefix-list private_ips_1 seq 5 permit 192.168.0.0/16 ge 16
+- ip prefix-list private_ips seq 5 permit 192.168.0.0/16 ge 16 le 32
++ ip prefix-list private_ips seq 5 permit 192.168.0.0/16 ge 24 le 24
 \`\`\``,
                 answer: `In the network verification tool Minesweeper, IP addresses and corresponding prefix-lengths (masks) are represented as 32-bit bit-vectors. Consequently, the generated encodings involve bitwise operations that are precise for formal verification but not immediately intuitive for human interpretation. 
 
@@ -3758,12 +3902,42 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_128_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -3783,19 +3957,19 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
-  1. (= Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action true)
+  1. (= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action true)
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
-  1. (<= 16 Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end)
+  1. (<= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
-  1. (>= 16 Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start)
+  1. (>= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start)
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__prefix_range_start
@@ -3858,21 +4032,6 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. empty
@@ -3888,14 +4047,20 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_128_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
-  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__mask))))
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
+Subspecs (1):
+  1. (or (= ((_ extract 31 8) |0_dst-ip|) #xc0a880) (= ((_ extract 31 8) |0_dst-ip|) #xc0a881)) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))))
+  2. (= ((_ extract 31 8) |0_dst-ip|) #xc0a881) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))))
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__ip
@@ -3906,46 +4071,6 @@ Subspecs (1):
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip
 Subspecs (1):
   1. empty
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__action
-Subspecs (1):
-  1. (= Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__action true)
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_end
-Subspecs (1):
-  1. (<= 16 Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_end)
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_start
-Subspecs (1):
-  1. (>= 16 Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_start)
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__ip
-Subspecs (1):
-  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__mask))))
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__action
-Subspecs (1):
-  1. (= Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__action true)
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_end
-Subspecs (1):
-  1. (<= 16 Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_end)
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_start
-Subspecs (1):
-  1. (>= 16 Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_start)
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__ip
-Subspecs (1):
-  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__mask))))
 --------------------------------------------------`,
                 lineSubspec: `Line-Level Subspecs
 ==================
@@ -3975,14 +4100,30 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
-  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (>= 16 Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start) AND (<= 16 Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__mask)))) AND (= Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action true)
+  1. (or (= ((_ extract 31 8) |0_dst-ip|) #xc0a880) (= ((_ extract 31 8) |0_dst-ip|) #xc0a881)) AND (>= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) AND (<= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask)))) AND (= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action true)
+  2. (= ((_ extract 31 8) |0_dst-ip|) #xc0a881) AND (>= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) AND (<= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask)))) AND (= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action true)
 --------------------------------------------------
 
 Line Group: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1
@@ -4013,21 +4154,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. empty
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Line Group: Config_r3_RouteFilterList_private_ips_2__Line1
-Subspecs (1):
-  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (>= 16 Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_start) AND (<= 16 Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_end) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__mask)))) AND (= Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__action true)
---------------------------------------------------
-
-Line Group: Config_r3_RouteFilterList_private_ips_3__Line1
-Subspecs (1):
-  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (>= 16 Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_start) AND (<= 16 Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_end) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__mask)))) AND (= Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__action true)
 --------------------------------------------------`,
                 configSubspecTrans: `Config-Level Subspecs
 ====================
@@ -4072,12 +4198,42 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__prefix_range_start
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_128_0__prefix_range_start
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3_prepend_aspath_cost
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
 Subspecs (1):
   1. empty
 --------------------------------------------------
@@ -4097,19 +4253,19 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__action
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
 Subspecs (1):
   1. permit
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_end
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
 Subspecs (1):
-  1. prefix le range = 16~32
+  1. prefix le range = 24~32
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__prefix_range_start
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start
 Subspecs (1):
-  1. prefix ge range = 0~16
+  1. prefix ge range = 0~24
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__prefix_range_start
@@ -4172,21 +4328,6 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
 Config Variable: Config_isp1_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_0_2_0__ip
 Subspecs (1):
   1. empty
@@ -4202,14 +4343,19 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_128_0__ip
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Config Variable: Config_r3_RouteFilterList_private_ips_1__Line1__192_160_0_0__ip
+Config Variable: Config_customer_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__192_168_129_0__ip
 Subspecs (1):
-  1. prefix cover 192.168.0.0/16
+  1. empty
+--------------------------------------------------
+
+Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
+Subspecs (1):
+  1. aggregated prefix cover 192.168.128.0/23
 --------------------------------------------------
 
 Config Variable: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1__198_51_100_0__ip
@@ -4220,46 +4366,6 @@ Subspecs (1):
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__198_51_100_0__ip
 Subspecs (1):
   1. empty
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__action
-Subspecs (1):
-  1. permit
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_end
-Subspecs (1):
-  1. prefix le range = 16~32
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__prefix_range_start
-Subspecs (1):
-  1. prefix ge range = 0~16
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_2__Line1__192_160_0_0__ip
-Subspecs (1):
-  1. prefix cover 192.168.0.0/16
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__action
-Subspecs (1):
-  1. permit
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_end
-Subspecs (1):
-  1. prefix le range = 16~32
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__prefix_range_start
-Subspecs (1):
-  1. prefix ge range = 0~16
---------------------------------------------------
-
-Config Variable: Config_r3_RouteFilterList_private_ips_3__Line1__192_168_0_0__ip
-Subspecs (1):
-  1. prefix cover 192.168.0.0/16
 --------------------------------------------------`,
                 lineSubspecTrans: `Line-Level Subspecs
 ==================
@@ -4289,14 +4395,29 @@ Subspecs (1):
   1. empty
 --------------------------------------------------
 
+Line Group: Config_r2_CommunityList_500200__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RouteFilterList_default_ips__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
+Line Group: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1
+Subspecs (1):
+  1. empty
+--------------------------------------------------
+
 Line Group: Config_r3_RouteFilterList_default_ips__Line1
 Subspecs (1):
   1. empty
 --------------------------------------------------
 
-Line Group: Config_r3_RouteFilterList_private_ips_1__Line1
+Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
-  1. permit AND prefix cover 192.168.0.0/16 AND prefix ge range = 0~16 AND prefix le range = 16~32
+  1. permit AND aggregated prefix cover 192.168.128.0/23 AND prefix ge range = 0~24 AND prefix le range = 24~32
 --------------------------------------------------
 
 Line Group: Config_isp2_RoutingPolicy_BGP_COMMON_EXPORT_POLICY_default__Line1
@@ -4327,21 +4448,6 @@ Subspecs (1):
 Line Group: Config_r2_CommunityList_400100__Line1
 Subspecs (1):
   1. empty
---------------------------------------------------
-
-Line Group: Config_r2_RouteFilterList_default_ips__Line1
-Subspecs (1):
-  1. empty
---------------------------------------------------
-
-Line Group: Config_r3_RouteFilterList_private_ips_2__Line1
-Subspecs (1):
-  1. permit AND prefix cover 192.168.0.0/16 AND prefix ge range = 0~16 AND prefix le range = 16~32
---------------------------------------------------
-
-Line Group: Config_r3_RouteFilterList_private_ips_3__Line1
-Subspecs (1):
-  1. permit AND prefix cover 192.168.0.0/16 AND prefix ge range = 0~16 AND prefix le range = 16~32
 --------------------------------------------------`,
                 highlight: `R1_IN_FROM_ISP1
 R1_OUT_TO_ISP1
@@ -4633,6 +4739,8 @@ private_ips_3
 
         // Initialize test
         function initTest() {
+            // Initialize EmailJS
+            emailjs.init('YOUR_PUBLIC_KEY'); // Replace with actual public key
             
             updateUITexts(); // Initialize UI texts
             showStartScreen(); // Show start screen first
@@ -4717,7 +4825,7 @@ private_ips_3
                         
                         <div class="question-instruction">
                             ${question.isTestQuestion ? 
-                                '<strong>📋 Qualification Test:</strong> This is a brief assessment to evaluate your basic network knowledge. Please select the correct option(s) below.' :
+                                '<strong>📋 Select all that apply:</strong> You may choose one, multiple, or all options below.' :
                                 '<strong>📋 Select all that apply:</strong> You may choose one, multiple, or all options below.'
                             }
                         </div>
@@ -5760,21 +5868,27 @@ private_ips_3
             }
         }
 
-
         function submitToNetlify(testData) {
+            // 验证必要数据
+            if (!testData.timestamp || !testData.userGroup || !testData.language) {
+                console.error('缺少必要数据:', testData);
+                showSurveyError();
+                return;
+            }
+            
             // 使用fetch API提交到Netlify Forms，避免页面跳转
             const formData = new FormData();
             formData.append('form-name', 'user-study-results');
             formData.append('timestamp', testData.timestamp);
             formData.append('userGroup', testData.userGroup);
             formData.append('language', testData.language);
-            formData.append('totalTime', testData.totalTime);
-            formData.append('score', testData.score);
-            formData.append('totalQuestions', testData.totalQuestions);
-            formData.append('questionTimes', JSON.stringify(testData.questionTimes));
-            formData.append('answers', JSON.stringify(testData.answers));
-            formData.append('surveyQ1', testData.survey.question1);
-            formData.append('surveyQ2', testData.survey.question2);
+            formData.append('totalTime', testData.totalTime || '0');
+            formData.append('score', testData.score || '0');
+            formData.append('totalQuestions', testData.totalQuestions || '0');
+            formData.append('questionTimes', JSON.stringify(testData.questionTimes || []));
+            formData.append('answers', JSON.stringify(testData.answers || []));
+            formData.append('surveyQ1', testData.survey.question1 || '');
+            formData.append('surveyQ2', testData.survey.question2 || '');
             formData.append('bot-field', ''); // honeypot field
             
             // 提交数据到Netlify Forms
@@ -5785,12 +5899,18 @@ private_ips_3
             .then(response => {
                 if (response.ok) {
                     console.log('数据已成功提交到Netlify Forms');
+                    showSurveySuccess();
                     // 提交成功后显示完成提示
-                    showSurveyComplete(testData);
+                    setTimeout(() => {
+                        showSurveyComplete(testData);
+                    }, 2000);
                 } else {
                     console.error('提交失败:', response.status);
+                    showSurveyError();
                     // 即使失败也显示完成提示
-                    showSurveyComplete(testData);
+                    setTimeout(() => {
+                        showSurveyComplete(testData);
+                    }, 3000);
                 }
             })
             .catch(error => {
@@ -5800,6 +5920,51 @@ private_ips_3
             });
         }
 
+        function sendSurveyEmail(testData) {
+            // 构建邮件内容
+            const emailContent = buildEmailContent(testData);
+            
+            // 使用EmailJS发送邮件
+            emailjs.send('service_id', 'template_id', {
+                to_email: 'linyx2025@shanghaitech.edu.cn',
+                subject: `网络验证测试结果 - ${testData.userGroup}组`,
+                message: emailContent
+            })
+            .then(() => {
+                showSurveySuccess();
+            })
+            .catch((error) => {
+                console.error('邮件发送失败:', error);
+                showSurveyError();
+            });
+        }
+
+        function buildEmailContent(testData) {
+            const t = texts[currentLanguage];
+            let content = `网络验证测试结果报告\n\n`;
+            content += `测试时间: ${testData.timestamp}\n`;
+            content += `测试组别: ${testData.userGroup}组\n`;
+            content += `测试语言: ${testData.language === 'zh' ? '中文' : 'English'}\n`;
+            content += `总用时: ${testData.totalTime}\n`;
+            content += `得分: ${testData.score}/${testData.totalQuestions}\n\n`;
+            
+            content += `各题用时:\n`;
+            testData.questionTimes.forEach((time, index) => {
+                content += `问题${index + 1}: ${time}\n`;
+            });
+            
+            content += `\n用户答案:\n`;
+            testData.answers.forEach((answer, index) => {
+                content += `问题${index + 1}: ${answer.join(', ')}\n`;
+            });
+            
+            content += `\n问卷调查:\n`;
+            content += `问题1: ${testData.survey.question1}\n`;
+            content += `问题2: ${testData.survey.question2}\n`;
+            // 星级评分已移除
+            
+            return content;
+        }
 
         function showSurveySuccess() {
             const submitBtn = document.querySelector('.submit-survey-btn');
@@ -5829,7 +5994,7 @@ private_ips_3
             
             // 恢复按钮状态
             const submitBtn = document.querySelector('.submit-survey-btn');
-            submitBtn.textContent = 'Complete';
+            submitBtn.textContent = 'Completed';
             submitBtn.disabled = false;
             submitBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
             
