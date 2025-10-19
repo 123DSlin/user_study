@@ -5,6 +5,16 @@
   NODE_VERSION = "18"
   NETLIFY_FORMS_DEBUG = "true"
 
+# 表单处理配置
+[build.processing]
+  skip_processing = false
+
+# 表单设置
+[[forms]]
+  name = "user-study-results"
+  action = "/"
+  method = "POST"
+
 [[headers]]
   for = "/*"
   [headers.values]
