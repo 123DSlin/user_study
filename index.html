@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Verification User Study</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .group-selector {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .group-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .group-a {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .group-b {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .group-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Network Verification User Study</h1>
+        <div class="description">
+            <p>Welcome to our user study on network verification tools. Please select your test group to begin.</p>
+            <p><strong>Note:</strong> The test will take approximately 30-40 minutes to complete.</p>
+            <p><a href="https://github.com/yongzheng2024/batfish/tree/minesweeper-v2021/user-study" target="_blank" style="color: #667eea; text-decoration: underline; font-weight: bold; font-size: 18px;">📚 Introduction videos and quiz materials</a> - Please review these resources before starting the test.</p>
+        </div>
+        
+        <div class="group-selector">
+            <a href="groupA.html" class="group-btn group-a">
+                Group A Test
+            </a>
+            <a href="groupB.html" class="group-btn group-b">
+                Group B Test
+            </a>
+        </div>
+        
+        <div class="description">
+            <p><small>Both groups will test the same functionality but with different interfaces.</small></p>
+        </div>
+    </div>
+</body>
+</html>

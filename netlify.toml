@@ -1,0 +1,32 @@
+[build]
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+  NETLIFY_FORMS_DEBUG = "true"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 表单处理配置
+[build.processing]
+  skip_processing = false
+
+# 表单处理设置 - 使用内置表单功能，无需额外插件
+
+# 重定向规则
+[[redirects]]
+  from = "/groupA"
+  to = "/groupA.html"
+  status = 200
+
+[[redirects]]
+  from = "/groupB"
+  to = "/groupB.html"
+  status = 200
+
