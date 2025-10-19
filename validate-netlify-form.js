@@ -27,6 +27,8 @@ const REQUIRED_CONFIG = {
         'answers',
         'surveyQ1',
         'surveyQ2',
+        'susTotalScore',
+        'susScores',
         'bot-field'
     ],
     requiredFunction: 'submitToNetlify'

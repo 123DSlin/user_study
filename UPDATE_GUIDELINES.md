@@ -19,6 +19,8 @@
     <input type="hidden" name="answers">
     <input type="hidden" name="surveyQ1">
     <input type="hidden" name="surveyQ2">
+    <input type="hidden" name="susTotalScore">
+    <input type="hidden" name="susScores">
     <input type="hidden" name="bot-field">
 </form>
 ```
@@ -39,6 +41,8 @@ function submitToNetlify(testData) {
     formData.append('answers', JSON.stringify(testData.answers || []));
     formData.append('surveyQ1', testData.survey.question1 || '');
     formData.append('surveyQ2', testData.survey.question2 || '');
+    formData.append('susTotalScore', testData.sus.totalScore || '0');
+    formData.append('susScores', JSON.stringify(testData.sus.scores || {}));
     formData.append('bot-field', '');
     
     fetch('/', {
