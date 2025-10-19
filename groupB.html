@@ -1832,7 +1832,7 @@
 </head>
 <body>
     <!-- Netlify表单配置 -->
-    <form name="user-study-results" netlify netlify-honeypot="bot-field" style="display: none;">
+    <form name="user-study-results" netlify netlify-honeypot="bot-field" action="/" method="POST" style="display: none;">
         <input type="hidden" name="form-name" value="user-study-results">
         <input type="hidden" name="timestamp">
         <input type="hidden" name="userGroup">
@@ -9688,19 +9688,28 @@ private_ips_3
         // Netlify表单提交函数
         function submitToNetlify(testData) {
             try {
-                const formData = new FormData();
-                formData.append('form-name', 'user-study-results');
-                formData.append('timestamp', testData.timestamp);
-                formData.append('userGroup', testData.userGroup);
-                formData.append('language', testData.language);
-                formData.append('totalTime', testData.totalTime || '0');
-                formData.append('score', testData.score || '0');
-                formData.append('totalQuestions', testData.totalQuestions || '0');
-                formData.append('questionTimes', JSON.stringify(testData.questionTimes || []));
-                formData.append('answers', JSON.stringify(testData.answers || []));
-                formData.append('surveyQ1', testData.survey.question1 || '');
-                formData.append('surveyQ2', testData.survey.question2 || '');
-                formData.append('bot-field', ''); // honeypot field
+                // 获取隐藏表单
+                const form = document.querySelector('form[name="user-study-results"]');
+                if (!form) {
+                    console.error('找不到Netlify表单');
+                    return;
+                }
+                
+                // 填充表单字段
+                form.querySelector('input[name="timestamp"]').value = testData.timestamp;
+                form.querySelector('input[name="userGroup"]').value = testData.userGroup;
+                form.querySelector('input[name="language"]').value = testData.language;
+                form.querySelector('input[name="totalTime"]').value = testData.totalTime || '0';
+                form.querySelector('input[name="score"]').value = testData.score || '0';
+                form.querySelector('input[name="totalQuestions"]').value = testData.totalQuestions || '0';
+                form.querySelector('input[name="questionTimes"]').value = JSON.stringify(testData.questionTimes || []);
+                form.querySelector('input[name="answers"]').value = JSON.stringify(testData.answers || []);
+                form.querySelector('input[name="surveyQ1"]').value = testData.survey.question1 || '';
+                form.querySelector('input[name="surveyQ2"]').value = testData.survey.question2 || '';
+                form.querySelector('input[name="bot-field"]').value = ''; // honeypot field
+                
+                // 创建FormData并提交
+                const formData = new FormData(form);
                 
                 // 提交数据到Netlify Forms
                 fetch('/', {
@@ -9711,7 +9720,7 @@ private_ips_3
                     if (response.ok) {
                         console.log('数据已成功提交到Netlify Forms');
                     } else {
-                        console.error('提交失败:', response.status);
+                        console.error('提交失败:', response.status, response.statusText);
                     }
                 })
                 .catch(error => {
