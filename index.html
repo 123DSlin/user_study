@@ -3,82 +3,534 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network Verification User Study</title>
+    <title>Explainable Network Verification via Subspecifications - User Study</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-size: 16px;
+            font-weight: 525;
+            line-height: 1.6;
+            color: #333;
+        }
+        
         .container {
             background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .title {
+            margin-bottom: 40px;
+        }
+        
+        .title h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 4px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .title h2 {
+            color: #666;
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+            margin-bottom: 0;
+        }
+        
+        .form-table {
+            width: auto;
+            border-collapse: collapse;
+            margin: 0 auto 40px auto;
+        }
+        
+        .form-table tr {
+            height: 60px;
+        }
+        
+        .label-cell {
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            text-align: right;
+            padding-right: 20px;
+            width: 350px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+        
+        .content-cell {
+            padding-left: 20px;
+            vertical-align: middle;
+            text-align: left;
+        }
+        
+        .separator-row {
+            height: 20px;
+        }
+        
+        .separator-cell {
+            padding: 0;
             text-align: center;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
+        
+        .separator-line {
+            height: 2px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            margin: 10px 0;
         }
-        .group-selector {
+        
+        .lang-buttons {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 30px 0;
+            gap: 15px;
         }
-        .group-btn {
-            padding: 15px 30px;
+        
+        .lang-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .number-input {
+            width: 200px;
+            padding: 15px;
             font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+        
+        .number-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .group-info {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .start-btn {
+            padding: 0;
+            font-size: 20px;
             border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            width: 200px;
+            height: 60px;
+            text-align: center;
+            line-height: 60px;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .start-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        
+        .video-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .video-link {
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            min-width: 80px;
+        }
+        
+        .video-link.bilibili {
+            background: #fb7299;
+            color: white;
+        }
+        
+        .video-link.youtube {
+            background: #e53e3e;
+            color: white;
+        }
+        
+        .video-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .platform {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .lang {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 700;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .modal p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            border: none;
+            font-weight: bold;
+            min-width: 150px;
         }
-        .group-a {
+        
+        .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        .group-b {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
             color: white;
         }
-        .group-btn:hover {
+        
+        .btn-secondary:hover {
+            background: #5a6268;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .description {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
+        
+        /* Browser-specific font size adjustments for better compatibility */
+        .browser-firefox {
+            font-size: 17px; /* Slightly larger for Firefox */
+        }
+        
+        .browser-safari {
+            font-size: 16px; /* Standard size for Safari */
+        }
+        
+        .browser-chrome,
+        .browser-other {
+            font-size: 16px; /* Standard size for Chrome/Edge/Other */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Network Verification User Study</h1>
-        <div class="description">
-            <p>Welcome to our user study on network verification tools. Please select your test group to begin.</p>
-            <p><strong>Note:</strong> The test will take approximately 30-40 minutes to complete.</p>
-            <p><a href="https://github.com/yongzheng2024/batfish/tree/minesweeper-v2021/user-study" target="_blank" style="color: #667eea; text-decoration: underline; font-weight: bold; font-size: 18px;">📚 Introduction videos and quiz materials</a> - Please review these resources before starting the test.</p>
+        <div class="title">
+            <h1>Explainable Network Verification via Subspecifications - User Study</h1>
+            <h2>基于子规约的可解释网络验证 - 用户研究</h2>
         </div>
         
-        <div class="group-selector">
-            <a href="groupA.html" class="group-btn group-a">
-                Group A Test
-            </a>
-            <a href="groupB.html" class="group-btn group-b">
-                Group B Test
-            </a>
+        <table class="form-table">
+            <tr>
+                <td class="label-cell" id="langTitle">Select language</td>
+                <td class="content-cell">
+                    <div class="lang-buttons">
+                        <button class="lang-btn active" onclick="selectLanguage('en')">English</button>
+                        <button class="lang-btn" onclick="selectLanguage('zh')">中文</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-cell" id="inputTitle">Enter 4-digit number</td>
+                <td class="content-cell">
+                    <input type="text" class="number-input" id="userNumber" maxlength="4" placeholder="1234">
+                </td>
+            </tr>
+            <tr class="separator-row">
+                <td colspan="2" class="separator-cell">
+                    <div class="separator-line"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-cell" id="backgroundTitle">Video of background introduction</td>
+                <td class="content-cell">
+                    <div class="video-links">
+                        <a href="https://www.youtube.com/watch?v=mZsDmN9AtN8" class="video-link youtube" target="_blank">
+                            <span class="platform">YouTube</span>
+                            <span class="lang">English</span>
+                        </a>
+                        <a href="https://www.youtube.com/watch?v=D9llwLMWvBs" class="video-link youtube" target="_blank">
+                            <span class="platform">YouTube</span>
+                            <span class="lang">中文</span>
+                        </a>
+                        <a href="https://www.bilibili.com/video/BV1uFWRzLE63/" class="video-link bilibili" target="_blank">
+                            <span class="platform">Bilibili</span>
+                            <span class="lang">English</span>
+                        </a>
+                        <a href="https://www.bilibili.com/video/BV13RW9zUEm2/" class="video-link bilibili" target="_blank">
+                            <span class="platform">Bilibili</span>
+                            <span class="lang">中文</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-cell" id="frameworkTitle">Video of framework introduction</td>
+                <td class="content-cell">
+                    <div class="video-links">
+                        <a href="https://www.youtube.com/watch?v=ip4DJUXGFaE" class="video-link youtube" target="_blank">
+                            <span class="platform">YouTube</span>
+                            <span class="lang">English</span>
+                        </a>
+                        <a href="https://www.youtube.com/watch?v=x7AmC7-VZ_4" class="video-link youtube" target="_blank">
+                            <span class="platform">YouTube</span>
+                            <span class="lang">中文</span>
+                        </a>
+                        <a href="https://www.bilibili.com/video/BV1bFWRzVEUE/" class="video-link bilibili" target="_blank">
+                            <span class="platform">Bilibili</span>
+                            <span class="lang">English</span>
+                        </a>
+                        <a href="https://www.bilibili.com/video/BV1XRW9zmENh/" class="video-link bilibili" target="_blank">
+                            <span class="platform">Bilibili</span>
+                            <span class="lang">中文</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <div class="group-info" id="groupInfo">
+            <span id="groupText"></span>
         </div>
         
-        <div class="description">
-            <p><small>Both groups will test the same functionality but with different interfaces.</small></p>
+        <button class="start-btn" id="startBtn" onclick="showConfirmModal()" disabled>
+            <span id="startText">Start / 开始</span>
+        </button>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3 id="confirm-title">Please watch the introduction videos</h3>
+            <p id="confirm-text">Please watch both introduction videos before starting the user study.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()" id="confirm-cancel">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmStart()" id="confirm-confirm">Start Study</button>
+            </div>
         </div>
     </div>
+
+    <script>
+        let selectedLanguage = 'en';
+        let userNumber = '';
+        
+        // Language texts
+        const texts = {
+            en: {
+                langTitle: 'Select language',
+                inputTitle: 'Enter the provided 4-digit number',
+                startText: 'Start',
+                placeholder: '1234',
+                backgroundTitle: 'Video of background introduction',
+                frameworkTitle: 'Video of framework introduction',
+                confirmTitle: 'Please watch the introduction videos',
+                confirmText: 'Please watch both introduction videos before starting the user study.',
+                confirmCancel: 'Cancel',
+                confirmStart: 'Start User Study'
+            },
+            zh: {
+                langTitle: '选择语言',
+                inputTitle: '输入您获得的4位数字',
+                startText: '开始',
+                placeholder: '1234',
+                backgroundTitle: '背景介绍视频',
+                frameworkTitle: '系统介绍视频',
+                confirmTitle: '请您观看完两个介绍视频',
+                confirmText: '请您观看完两个介绍视频后，再开始进行用户研究',
+                confirmCancel: '取消',
+                confirmStart: '开始用户研究'
+            }
+        };
+        
+        
+        function selectLanguage(lang) {
+            selectedLanguage = lang;
+            
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update texts
+            updateTexts();
+        }
+        
+        function updateTexts() {
+            const t = texts[selectedLanguage];
+            document.getElementById('langTitle').textContent = t.langTitle;
+            document.getElementById('inputTitle').textContent = t.inputTitle;
+            document.getElementById('startText').textContent = t.startText;
+            document.getElementById('userNumber').placeholder = t.placeholder;
+            document.getElementById('backgroundTitle').textContent = t.backgroundTitle;
+            document.getElementById('frameworkTitle').textContent = t.frameworkTitle;
+            document.getElementById('confirm-title').textContent = t.confirmTitle;
+            document.getElementById('confirm-text').textContent = t.confirmText;
+            document.getElementById('confirm-cancel').textContent = t.confirmCancel;
+            document.getElementById('confirm-confirm').textContent = t.confirmStart;
+        }
+        
+        
+        // Handle number input
+        document.getElementById('userNumber').addEventListener('input', function(e) {
+            // Only allow numbers
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = value.substring(0, 4);
+            }
+            e.target.value = value;
+            userNumber = value;
+            
+            // Update group info
+            updateGroupInfo();
+            
+            // Enable/disable start button
+            document.getElementById('startBtn').disabled = value.length !== 4;
+        });
+        
+        function updateGroupInfo() {
+            // Remove group assignment display - keep it simple
+            document.getElementById('groupText').textContent = '';
+        }
+        
+        function showConfirmModal() {
+            // Check if user number is valid
+            if (!userNumber || userNumber.length !== 4) {
+                alert(selectedLanguage === 'zh' ? '请输入4位数字' : 'Please enter a 4-digit number');
+                return;
+            }
+            
+            // Check if language is selected
+            if (!selectedLanguage) {
+                alert(selectedLanguage === 'zh' ? '请选择语言' : 'Please select a language');
+                return;
+            }
+            
+            // Show confirmation modal
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+        
+        function confirmStart() {
+            const lastDigit = parseInt(userNumber.slice(-1));
+            const isOdd = lastDigit % 2 === 1;
+            const group = isOdd ? 'A' : 'B';
+            
+            // Store language preference in localStorage
+            localStorage.setItem('selectedLanguage', selectedLanguage);
+            localStorage.setItem('userNumber', userNumber);
+            
+            // Redirect to specific group and language file
+            const targetPage = `group${group}_${selectedLanguage}.html`;
+            window.location.href = targetPage;
+        }
+        
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+        
+        // Initialize
+        updateTexts();
+    </script>
 </body>
 </html>
