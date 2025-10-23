@@ -526,7 +526,16 @@
             margin-bottom: 20px;
             font-size: 1.05em;
             color: #1976d2;
-            text-align: center;
+            text-align: left;
+        }
+
+        .question-instruction .instruction-line {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .question-instruction .instruction-line:last-child {
+            margin-bottom: 0;
         }
 
         .question-options {
@@ -2059,7 +2068,8 @@
                 'coreConfig': 'Core Configuration Fragment',
                 'coreConfigWithSubspecs': 'Core Configuration Fragment (with subspecs annotations)',
                 'maintenanceTask': 'Maintenance Task',
-                'questionNote': 'When modifying multiple configuration fields within a configuration line or removing the entire line, please refer to the line-level subspec!',
+                'questionNote1': 'When modifying multiple configuration fields, refer to the line-level subspec!',
+                'questionNote2': 'When removing an entire configuration line, refer to the <span style="color: red;">empty</span> line-level subspec!',
                 'nextQuestion': 'Next Question',
                 'confirmTitle': 'Confirm Selection',
                 'confirmText': 'Please confirm your selection. You cannot go back after confirmation, please choose carefully.',
@@ -2126,7 +2136,7 @@
                 'nextAnswer': 'Next Answer',
                 'previousAnswer': 'Previous Answer',
                 'backToResults': 'Back to Results',
-                'correctAnswersInstruction': 'Correct answers are shown below with ✓ and incorrect options with ✗.',
+                'correctAnswersInstruction': 'Correct options are shown below with ✓ and incorrect options with ✗.',
                 'answerExplanation': 'Answer Explanation',
                 'totalTimeLabel': 'Total Time',
                 'currentQuestionLabel': 'Current Question',
@@ -2143,7 +2153,8 @@
                 'coreConfig': '核心配置片段',
                 'coreConfigWithSubspecs': '核心配置片段（带子规约提示注释）',
                 'maintenanceTask': '维护任务',
-                'questionNote': '当修改配置行中的多个配置域或删除整行配置时，请参考配置行子规约！',
+                'questionNote1': '修改多个配置域时，请参考配置域子规格！',
+                'questionNote2': '删除整行配置行时，请参考<span style="color: red;">空的</span>配置域子规格！',
                 'nextQuestion': '下一题',
                 'confirmTitle': '确认选择',
                 'confirmText': '请确认您的选择。确认后无法返回，请仔细选择。',
@@ -2210,7 +2221,7 @@
                 'nextAnswer': '下一答案',
                 'previousAnswer': '上一答案',
                 'backToResults': '返回结果',
-                'correctAnswersInstruction': '正确答案如下所示，用 ✓ 标记，错误选项用 ✗ 标记。',
+                'correctAnswersInstruction': '正确选项如下所示，用 ✓ 标记，错误选项用 ✗ 标记。',
                 'answerExplanation': '答案解析',
                 'totalTimeLabel': '总时间',
                 'currentQuestionLabel': '当前问题',
@@ -8456,7 +8467,8 @@ private_ips
                         </div>
                         
                         ${showSubspecs ? `<div class="question-instruction">
-                            <strong>📋</strong> ${texts.questionNote}
+                            <div class="instruction-line">📋 ${texts.questionNote1}</div>
+                            <div class="instruction-line">📋 ${texts.questionNote2}</div>
                         </div>` : ''}
                         
                         <div class="question-options">
