@@ -972,6 +972,29 @@
             color: #000;
         }
 
+        .diff-header {
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+            padding-left: 8px;
+            font-weight: 600;
+        }
+
+        .diff-router {
+            color: #007bff;
+            font-weight: bold;
+            background-color: #e3f2fd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .diff-line-numbers {
+            color: #fd7e14;
+            font-weight: bold;
+            background-color: #fef7e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
         /* 通用配置字体样式 - 统一 Core Configuration Fragment 和 Maintenance Task */
         .config-font {
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -9078,6 +9101,11 @@ private_ips
                 } else if (trimmedLine.startsWith('+')) {
                     // 添加的行 - 绿色
                     return `<div class="diff-line diff-added">${line}</div>`;
+                } else if (trimmedLine.startsWith('@@') && trimmedLine.includes('Configuration')) {
+                    // diff提示行 - 高亮显示Rx和行号
+                    const highlightedLine = line.replace(/(@@\s+)(R\d+)(\s+Configuration\s+)(\d+,\d+)(\s+@@)/g, 
+                        '$1<span class="diff-router">$2</span>$3<span class="diff-line-numbers">$4</span>$5');
+                    return `<div class="diff-line diff-header">${highlightedLine}</div>`;
                 } else {
                     // 普通行 - 默认颜色
                     return `<div class="diff-line diff-context">${line}</div>`;
