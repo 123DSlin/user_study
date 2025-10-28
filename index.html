@@ -525,6 +525,9 @@
             localStorage.setItem('selectedLanguage', selectedLanguage);
             localStorage.setItem('userNumber', userNumber);
             
+            // Close the modal before redirecting
+            closeConfirmModal();
+            
             // Redirect to specific group and language file
             const targetPage = `group${group}_${selectedLanguage}.html`;
             window.location.href = targetPage;
