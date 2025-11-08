@@ -528,8 +528,8 @@
             // Close the modal before redirecting
             closeConfirmModal();
             
-            // Redirect to specific group and language file
-            const targetPage = `group${group}_${selectedLanguage}.html`;
+            // Redirect to specific group and language file with userNumber as URL parameter
+            const targetPage = `group${group}_${selectedLanguage}.html?userNumber=${userNumber}`;
             window.location.href = targetPage;
         }
         
