@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explainable Network Verification via Subspecifications - User Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            font-size: 16px;
+            font-weight: 525;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .coursera-question {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+        }
+        
+        .coursera-question-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        
+        .coursera-question-left {
+            padding: 20px;
+            border-right: 1px solid #e9ecef;
+        }
+        
+        .coursera-question-right {
+            padding: 20px;
+        }
+        
+        .coursera-question h4 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1200px) {
+            .coursera-question-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .coursera-question-left {
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+        }
+
+        .coursera-check-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            height: 38px;
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .coursera-check-btn:hover {
+            opacity: 0.9;
+        }
+
+        .question-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 17px;
+            font-weight: 525;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #333;
+            text-align: left;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+            accent-color: #667eea;
+        }
+
+        .option-item label {
+            flex: 1;
+            cursor: pointer;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 17px;
+            font-weight: 525;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .option-diff-content {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 525;
+            line-height: 1.5;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 5px 0;
+            color: #222;
+        }
+
+        .browser-chrome .option-diff-content,
+        .browser-edge .option-diff-content,
+        .browser-other .option-diff-content {
+            font-weight: 600 !important;
+        }
+
+        .option-text-content {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 17px;
+            font-weight: 525;
+            line-height: 1.5;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 5px 0;
+            color: #222;
+        }
+
+        .diff-line {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 525;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .browser-chrome .diff-line,
+        .browser-edge .diff-line,
+        .browser-other .diff-line {
+            font-weight: 600 !important;
+        }
+
+        .diff-removed {
+            color: #d73a49;
+        }
+
+        .diff-added {
+            color: #28a745;
+        }
+
+        .diff-context {
+            color: #000;
+        }
+
+        .config-reference {
+            color: #0066cc;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            transition: all 0.2s ease;
+            font-weight: 525;
+        }
+
+        .browser-chrome .config-reference,
+        .browser-edge .config-reference,
+        .browser-other .config-reference {
+            font-weight: 525 !important;
+        }
+
+        .config-reference:hover {
+            color: #004499;
+            text-decoration-style: solid;
+            text-decoration-thickness: 2px;
+        }
+
+        .config-field {
+            background: #DEEBF9;
+            color: #000;
+            padding: 1px 2px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            font-weight: 525;
+            display: inline;
+            box-sizing: content-box;
+        }
+
+        .browser-chrome .config-field,
+        .browser-edge .config-field,
+        .browser-other .config-field {
+            font-weight: 600 !important;
+        }
+
+        .config-field:hover {
+            background: #B3D9F8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .config-field.line-level {
+            background: #EFE0F2;
+            color: #000;
+            font-weight: 525;
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+
+        .config-field.empty-subspec {
+            background: #E8F4FD;
+            opacity: 0.8;
+        }
+
+        .config-field.line-level.empty-subspec {
+            background: #F4EAF6;
+            opacity: 0.8;
+        }
+
+        .browser-chrome .config-field.line-level,
+        .browser-edge .config-field.line-level,
+        .browser-other .config-field.line-level {
+            font-weight: 600 !important;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: #34495e;
+            color: #ffffff;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            max-width: 450px;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            visibility: hidden;
+            pointer-events: none;
+            word-wrap: break-word;
+            line-height: 1.5;
+            border: 1px solid #2c3e50;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: var(--arrow-top, 100%);
+            left: var(--arrow-left, 20px);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--arrow-border, #2c3e50 transparent transparent transparent);
+            transform: translateX(-50%);
+        }
+
+        .coursera-overall-feedback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px;
+            box-sizing: border-box;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 17px;
+            font-weight: 525;
+            line-height: 1.4;
+            text-align: center;
+            flex: 1;
+            color: #333;
+            visibility: hidden;
+        }
+        
+        .coursera-overall-feedback.show {
+            visibility: visible;
+        }
+
+        .config-content {
+            background: white;
+            padding: 15px 10px;
+            display: block;
+            border-top: 1px solid #e0e0e0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 525; /* Default for Safari/Firefox */
+            line-height: 1.5;
+            color: #222;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            overflow-x: auto;
+            text-align: left;
+        }
+
+        /* Chrome/Edge/Other specific font-weight for config content */
+        .browser-chrome .config-content,
+        .browser-edge .config-content,
+        .browser-other .config-content {
+            font-weight: 600 !important;
+        }
+
+        .config-line {
+            margin: 0;
+            position: relative;
+            white-space: pre;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .config-field {
+            background: #DEEBF9;
+            color: #000;
+            padding: 1px 2px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .highlight-route-map {
+            color: #e65100 !important;
+            font-weight: 600 !important;
+        }
+
+        .highlight-prefix-list {
+            color: #1565c0 !important;
+            font-weight: 600 !important;
+        }
+
+        .highlight-community-list {
+            color: #2e7d32 !important;
+            font-weight: 600 !important;
+        }
+
+        .highlight-number {
+            color: #8B4513 !important;
+            font-weight: 525 !important;
+            background: rgba(139, 69, 19, 0.05);
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+
+        /* Chrome/Edge/Other specific font-weight for highlight-number */
+        .browser-chrome .highlight-number,
+        .browser-edge .highlight-number,
+        .browser-other .highlight-number {
+            font-weight: 600 !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="header-title">Explainable Network Verification via Subspecifications - User Study</h1>
+        </div>
+
+        <div id="testContent">
+            <!-- 动态生成的内容 -->
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        
+        const textConstants = {
+            'en': {
+                'title': 'Explainable Network Verification via Subspecifications - User Study',
+                'questionLabel': 'Coursera Question',
+                'checkButton': 'CHECK',
+                'courseraIncorrect': '✗ You have selected some incorrect options.',
+                'courseraIncomplete': '⚠ Please select all correct options.',
+                'courseraCorrect': '✓ All correct! Well done!'
+            },
+            'zh': {
+                'title': '基于子规约的可解释网络验证 - 用户研究',
+                'questionLabel': 'Coursera 问题',
+                'checkButton': '确认',
+                'courseraIncorrect': '✗ 您选择了一些不正确的选项。',
+                'courseraIncomplete': '⚠ 请选择所有正确的选项。',
+                'courseraCorrect': '✓ 全部正确！做得好！'
+            }
+        };
+
+        let texts = textConstants[currentLanguage];
+        
+        const questionData = {
+            'coursera': {
+                'en': {questions: [{num: "1", text: "Based on the following configuration snippet, determine which of the following options are correct:", config: "ip prefix-list network_192_0_2_0 seq 5 permit 192.0.2.0/24 ge 24\n!\n!\nroute-map R1_IN_FROM_ISP1 permit 10\n match ip address prefix-list network_192_0_2_0\n set community 400:100 additive", options: [{num: "option1", correct: true, text: "Allow routes with prefix 192.0.2.0/25 to pass.", is_diff: false}, {num: "option2", correct: false, text: "Deny routes with prefix 192.0.2.0/25.", is_diff: false}, {num: "option3", correct: true, text: "Allow routes with prefix 192.0.2.0/24 to pass and add community 400:100.", is_diff: false}]}, {num: "2", text: "Based on the following topology and routing information (assuming no route-map policies are configured), determine which of the following options are correct:", config: "    +------+        +------+\n    |  R3  |--------| ISP1 |\n    +------+        +------+\n        |\n        |           +------+\n        +-----------| ISP2 |\n                    +------+\n\nRoutes: \n* ISP1 -> R3: 192.0.2.0/24,    AS-path length = 2\n* ISP1 -> R3: 198.51.100.0/24, AS-path length = 2\n* ISP2 -> R3: 192.0.2.0/24,    AS-path length = 1", options: [{num: "option1", correct: false, text: "R3 will select 192.0.2.0/24 and 198.51.100.0/24 learned from ISP1 as the best routes.", is_diff: false}, {num: "option2", correct: true, text: "R3 will select 192.0.2.0/24 learned from ISP2 as the best route.", is_diff: false}, {num: "option3", correct: true, text: "R3 will select 192.0.2.0/24 learned from ISP2 and 198.51.100.0/24 learned from ISP1 as the best routes.", is_diff: false}]}, {num: "3", text: "The verified network specification (i.e., the confirmed network routing policy or network design intent) requires blocking the private prefix 192.168.0.0/16.<br> Based on the following configuration snippet and <span style=\"color: red;\">field-level subspecs (highlighted in blue)</span>, determine which of the following options are correct when modifying a single configuration field:", config: "ip prefix-list private_ips seq 5  permit [172.16.0.0/12](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip)  ge 12\nip prefix-list private_ips seq 10 permit [192.168.0.0/12](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) ge 12\n!\n!\nroute-map R1_IN_FROM_Customer deny 10\n match ip address prefix-list private_ips", options: [{num: "option1", correct: true, text: "- ip prefix-list private_ips seq 5 permit [172.16.0.0/12] ge 12\n+ ip prefix-list private_ips seq 5 permit [10.0.0.0/8]    ge 12", is_diff: true}, {num: "option2", correct: false, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] ge 12\n+ ip prefix-list private_ips seq 10 permit [10.0.0.0/8]     ge 12", is_diff: true}, {num: "option3", correct: true, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] ge 12\n+ ip prefix-list private_ips seq 10 permit [192.168.0.0/10] ge 12", is_diff: true}]}, {num: "4", text: "The verified network specification (i.e., the confirmed network routing policy or network design intent) requires blocking the private prefix 192.168.0.0/16.<br> Based on the following configuration snippet and <span style=\"color: red;\">field-level subspecs (highlighted in blue)</span>, determine which of the following options are correct when modifying multiple single configuration fields or removing an entire configuration line:", config: "ip prefix-list private_ips seq 5  [permit](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__action) [172.16.0.0/12](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip)  [ge 12](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_start)\nip prefix-list private_ips seq 10 [permit](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) [192.168.0.0/12](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) [ge 12](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)\n!\n!\nroute-map R1_IN_FROM_Customer deny 10\n match ip address prefix-list private_ips", options: [{num: "option1", correct: false, text: "- ip prefix-list private_ips seq 5 [permit] [172.16.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 5 [deny]   [10.0.0.0/8]    [ge 8]", is_diff: true}, {num: "option2", correct: false, text: "- ip prefix-list private_ips seq 5 permit 172.16.0.0/12 ge 12", is_diff: true}, {num: "option3", correct: false, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 10 permit [192.168.0.0/16] [ge 16]", is_diff: true}]}, {num: "5", text: "The verified network specification (i.e., the confirmed network routing policy or network design intent) requires blocking the private prefix 192.168.0.0/16.<br> Based on the following configuration snippet and <span style=\"color: red;\">line-level subspecs (highlighted in purple)</span>, determine which of the following options are correct when modifying multiple single configuration fields or removing an entire configuration line:", config: "[ip prefix-list](Config_r1_RouteFilterList_private_ips__Line1) private_ips seq 5  permit 172.16.0.0/12  ge 12\n[ip prefix-list](Config_r1_RouteFilterList_private_ips__Line2) private_ips seq 10 permit 192.168.0.0/12 ge 12\n!\n!\nroute-map R1_IN_FROM_Customer deny 10\n match ip address prefix-list private_ips", options: [{num: "option1", correct: true, text: "- ip prefix-list private_ips seq 5 [permit] [172.16.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 5 [deny]   [10.0.0.0/8]    [ge 8]", is_diff: true}, {num: "option2", correct: true, text: "- ip prefix-list private_ips seq 5 permit 172.16.0.0/12 ge 12", is_diff: true}, {num: "option3", correct: true, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 10 permit [192.168.0.0/16] [ge 16]", is_diff: true}]}], configSubspecContent: "Config-Level Subspecs\n====================\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__length\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__action\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__length\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_end\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_start\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__ip\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (or a!1 (= ((_ extract 31 20) |0_dst-ip|) #xac1)))\n--------------------------------------------------", lineSubspecContent: "Line-Level Subspecs\n==================\n\nLine Group: Config_r1_RouteFilterList_default_ips__Line1\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line1\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line2\nSubspecs (1):\n  1. (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 0) AND (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 0) AND (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 0) AND (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (let ((a!2 (not (or (not a!1) (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) a!2)))\n--------------------------------------------------", configSubspecTransContent: "Config-Level Subspecs\n====================\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__length\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__action\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__length\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_end\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_start\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n  1. permit\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n  1. prefix le range = 16~32\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n  1. prefix ge range = 12~16\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__ip\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (or a!1 (= ((_ extract 31 20) |0_dst-ip|) #xac1)))\n  1. prefix cover 192.168.0.0/16\n--------------------------------------------------", lineSubspecTransContent: "Line-Level Subspecs\n==================\n\nLine Group: Config_r1_RouteFilterList_default_ips__Line1\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line1\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line2\nSubspecs (1):\n  1. (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) <b>AND</b> <br>(= ((_ extract 31 16) |0_dst-ip|) #xc0a8) <b>AND</b> <br>(let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (let ((a!2 (not (or (not a!1) (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) a!2)))\n  1. permit <b>AND</b> <br>prefix cover 192.168.0.0/16 <b>AND</b> <br>prefix ge range = 12~16 <b>AND</b> <br>prefix le range = 16~32 <b>AND</b> <br>prefix ge/le range >= prefix length\n--------------------------------------------------"},
+                'zh': {questions: [{num: "1", text: "基于以下配置代码片段，判断下列哪些选项是正确的：", config: "ip prefix-list network_192_0_2_0 seq 5 permit 192.0.2.0/24 ge 24\n!\n!\nroute-map R1_IN_FROM_ISP1 permit 10\n match ip address prefix-list network_192_0_2_0\n set community 400:100 additive", options: [{num: "option1", correct: true, text: "允许前缀为 192.0.2.0/25 的路由通过。", is_diff: false}, {num: "option2", correct: false, text: "拒绝前缀为 192.0.2.0/25 的路由。", is_diff: false}, {num: "option3", correct: true, text: "允许前缀为 192.0.2.0/24 的路由通过并添加 community 400:100。", is_diff: false}]}, {num: "2", text: "基于以下拓扑和路由信息（假设都未配置 route-map 路由策略），判断下列哪些选项是正确的：", config: "    +------+        +------+\n    |  R3  |--------| ISP1 |\n    +------+        +------+\n        |\n        |           +------+\n        +-----------| ISP2 |\n                    +------+\n\nRoutes: \n* ISP1 -> R3: 192.0.2.0/24,    AS-path length = 2\n* ISP1 -> R3: 198.51.100.0/24, AS-path length = 2\n* ISP2 -> R3: 192.0.2.0/24,    AS-path length = 1", options: [{num: "option1", correct: false, text: "R3 将选择从 ISP1 学到的 192.0.2.0/24 和 198.51.100.0/24 作为最佳路由。", is_diff: false}, {num: "option2", correct: true, text: "R3 将选择从 ISP2 学到的 192.0.2.0/24 作为最佳路由。", is_diff: false}, {num: "option3", correct: true, text: "R3 将选择从 ISP2 学到的 192.0.2.0/24 和从 ISP1 学到的 198.51.100.0/24 作为最佳路由。", is_diff: false}]}, {num: "3", text: "已验证的网络规约（即已确认的网络路由策略或网络设计意图）要求阻止私有前缀 192.168.0.0/16。<br> 基于以下配置代码片段和<span style=\"color: red;\">配置域子规约（蓝色高亮部分）</span>，判断在修改单个配置域时，下列哪些选项是正确的：", config: "ip prefix-list private_ips seq 5  permit [172.16.0.0/12](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip)  ge 12\nip prefix-list private_ips seq 10 permit [192.168.0.0/12](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) ge 12\n!\n!\nroute-map R1_IN_FROM_Customer deny 10\n match ip address prefix-list private_ips", options: [{num: "option1", correct: true, text: "- ip prefix-list private_ips seq 5 permit [172.16.0.0/12] ge 12\n+ ip prefix-list private_ips seq 5 permit [10.0.0.0/8]    ge 12", is_diff: true}, {num: "option2", correct: false, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] ge 12\n+ ip prefix-list private_ips seq 10 permit [10.0.0.0/8]     ge 12", is_diff: true}, {num: "option3", correct: true, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] ge 12\n+ ip prefix-list private_ips seq 10 permit [192.168.0.0/10] ge 12", is_diff: true}]}, {num: "4", text: "已验证的网络规约（即已确认的网络路由策略或网络设计意图）要求阻止私有前缀 192.168.0.0/16。<br> 基于以下配置代码片段和<span style=\"color: red;\">配置域子规约（蓝色高亮部分）</span>，判断在修改多个单个配置域或删除整个配置行时，下列哪些选项是正确的：", config: "ip prefix-list private_ips seq 5  [permit](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__action) [172.16.0.0/12](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip)  [ge 12](Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_start)\nip prefix-list private_ips seq 10 [permit](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) [192.168.0.0/12](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) [ge 12](Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)\n!\n!\nroute-map R1_IN_FROM_Customer deny 10\n match ip address prefix-list private_ips", options: [{num: "option1", correct: false, text: "- ip prefix-list private_ips seq 5 [permit] [172.16.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 5 [deny]   [10.0.0.0/8]    [ge 8]", is_diff: true}, {num: "option2", correct: false, text: "- ip prefix-list private_ips seq 5 permit 172.16.0.0/12 ge 12", is_diff: true}, {num: "option3", correct: false, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 10 permit [192.168.0.0/16] [ge 16]", is_diff: true}]}, {num: "5", text: "已验证的网络规约（即已确认的网络路由策略或网络设计意图）要求阻止私有前缀 192.168.0.0/16。<br> 基于以下配置代码片段和<span style=\"color: red;\">配置行子规约（紫色高亮部分）</span>，判断在修改多个单个配置域或删除整个配置行时，下列哪些选项是正确的：", config: "[ip prefix-list](Config_r1_RouteFilterList_private_ips__Line1) private_ips seq 5  permit 172.16.0.0/12  ge 12\n[ip prefix-list](Config_r1_RouteFilterList_private_ips__Line2) private_ips seq 10 permit 192.168.0.0/12 ge 12\n!\n!\nroute-map R1_IN_FROM_Customer deny 10\n match ip address prefix-list private_ips", options: [{num: "option1", correct: true, text: "- ip prefix-list private_ips seq 5 [permit] [172.16.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 5 [deny]   [10.0.0.0/8]    [ge 8]", is_diff: true}, {num: "option2", correct: true, text: "- ip prefix-list private_ips seq 5 permit 172.16.0.0/12 ge 12", is_diff: true}, {num: "option3", correct: true, text: "- ip prefix-list private_ips seq 10 permit [192.168.0.0/12] [ge 12]\n+ ip prefix-list private_ips seq 10 permit [192.168.0.0/16] [ge 16]", is_diff: true}]}], configSubspecContent: "Config-Level Subspecs\n====================\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__length\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__action\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__length\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_end\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_start\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__ip\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (or a!1 (= ((_ extract 31 20) |0_dst-ip|) #xac1)))\n--------------------------------------------------", lineSubspecContent: "Line-Level Subspecs\n==================\n\nLine Group: Config_r1_RouteFilterList_default_ips__Line1\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line1\nSubspecs (1):\n  1. empty\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line2\nSubspecs (1):\n  1. (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 0) AND (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 0) AND (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 0) AND (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (let ((a!2 (not (or (not a!1) (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) a!2)))\n--------------------------------------------------", configSubspecTransContent: "Config-Level Subspecs\n====================\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__length\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__action\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__length\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_end\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__prefix_range_start\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n  1. permit\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n  1. prefix le range = 16~32\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start\nSubspecs (1):\n  1. (<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) AND (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 12) AND (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (or (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)) (not (= ((_ extract 31 20) |0_dst-ip|) #xc0a))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) (not a!1)))\n  1. prefix ge range = 12~16\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__ip\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line1__172_16_0_0__ip\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nConfig Variable: Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip\nSubspecs (1):\n  1. (= ((_ extract 31 16) |0_dst-ip|) #xc0a8) AND (let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (or a!1 (= ((_ extract 31 20) |0_dst-ip|) #xac1)))\n  1. prefix cover 192.168.0.0/16\n--------------------------------------------------", lineSubspecTransContent: "Line-Level Subspecs\n==================\n\nLine Group: Config_r1_RouteFilterList_default_ips__Line1\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line1\nSubspecs (1):\n  1. unrestricted\n--------------------------------------------------\n\nLine Group: Config_r1_RouteFilterList_private_ips__Line2\nSubspecs (1):\n  1. (>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) <b>AND</b> <br>(>= Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__length) <b>AND</b> <br>(= ((_ extract 31 16) |0_dst-ip|) #xc0a8) <b>AND</b> <br>(let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__ip) (bvnot Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__mask)))))) (let ((a!2 (not (or (not a!1) (not (<= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_end)) (not Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__action) (not (>= 16 Config_r1_RouteFilterList_private_ips__Line2__192_160_0_0__prefix_range_start)))))) (or (= ((_ extract 31 20) |0_dst-ip|) #xac1) a!2)))\n  1. permit <b>AND</b> <br>prefix cover 192.168.0.0/16 <b>AND</b> <br>prefix ge range = 12~16 <b>AND</b> <br>prefix le range = 16~32 <b>AND</b> <br>prefix ge/le range >= prefix length\n--------------------------------------------------"}
+            }
+        };
+
+        // Language switching removed - separate files for each language
+
+        function showCourseraPage() {
+            const courseraData = questionData.coursera[currentLanguage] || questionData.coursera['en'];
+            const questions = courseraData.questions;
+            
+            // 解析 subspec 数据
+            const configSubspecContent = courseraData.configSubspecContent || '';
+            const lineSubspecContent = courseraData.lineSubspecContent || '';
+            const configSubspecTransContent = courseraData.configSubspecTransContent || '';
+            const lineSubspecTransContent = courseraData.lineSubspecTransContent || '';
+            
+            // 解析config-level subspec数据
+            const configSubspecData = {};
+            const configLines = configSubspecContent.split('\n');
+            let currentVar = null;
+            
+            for (const line of configLines) {
+                if (line.startsWith('Config Variable:')) {
+                    currentVar = line.split('Config Variable: ')[1].trim();
+                } else if (line.trim().startsWith('1.') && currentVar) {
+                    const subspec = line.trim().substring(2).trim();
+                    configSubspecData[currentVar] = subspec;
+                }
+            }
+            
+            // 解析line-level subspec数据
+            const lineSubspecData = {};
+            const lineSubspecNames = new Set();
+            const lineLines = lineSubspecContent.split('\n');
+            let currentLineGroup = null;
+            
+            for (const line of lineLines) {
+                if (line.startsWith('Line Group:')) {
+                    currentLineGroup = line.split('Line Group: ')[1].trim();
+                    if (currentLineGroup) {
+                        lineSubspecNames.add(currentLineGroup);
+                    }
+                } else if (line.trim().startsWith('1.') && currentLineGroup) {
+                    const subspec = line.trim().substring(2).trim();
+                    lineSubspecData[currentLineGroup] = subspec;
+                }
+            }
+            
+            // 解析转换后的config-level subspec数据
+            const configSubspecTransData = {};
+            if (configSubspecTransContent) {
+                const configTransLines = configSubspecTransContent.split('\n');
+                let currentVar = null;
+                
+                for (const line of configTransLines) {
+                    if (line.startsWith('Config Variable:')) {
+                        currentVar = line.split('Config Variable: ')[1].trim();
+                    } else if (line.trim().startsWith('1.') && currentVar) {
+                        const subspecTrans = line.trim().substring(2).trim();
+                        configSubspecTransData[currentVar] = subspecTrans;
+                    }
+                }
+            }
+            
+            // 解析转换后的line-level subspec数据
+            const lineSubspecTransData = {};
+            if (lineSubspecTransContent) {
+                const lineTransLines = lineSubspecTransContent.split('\n');
+                let currentLineGroup = null;
+                
+                for (const line of lineTransLines) {
+                    if (line.startsWith('Line Group:')) {
+                        currentLineGroup = line.split('Line Group: ')[1].trim();
+                    } else if (line.trim().startsWith('1.') && currentLineGroup) {
+                        const subspecTrans = line.trim().substring(2).trim();
+                        lineSubspecTransData[currentLineGroup] = subspecTrans;
+                    }
+                }
+            }
+            
+            // 合并两种subspec数据
+            const subspecData = {...configSubspecData, ...lineSubspecData};
+            
+            const courseraHtml = generateCourseraPageHTML(questions, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData);
+            document.getElementById('testContent').innerHTML = courseraHtml;
+            addCourseraEventListeners();
+        }
+
+        function generateCourseraPageHTML(questions, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData) {
+            return `
+                <div style="margin-top: 20px;">
+                    ${questions.map((q, idx) => generateCourseraQuestionHTML(q, idx, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData)).join('')}
+                </div>
+            `;
+        }
+
+        function generateCourseraQuestionHTML(question, index, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData) {
+            const questionId = `coursera-${index}`;
+            
+            let configHtml = '';
+            if (question.config) {
+                const highlightTerms = extractHighlightTerms(question.config);
+                const categorizedTerms = categorizeConfigTerms(highlightTerms);
+                
+                const configLines = question.config.split('\n');
+                const processedLines = configLines.map((line, lineIdx) => {
+                    let processedLine = processLineNumber(line);
+                    processedLine = processCourseraConfigLine(processedLine, categorizedTerms, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData);
+                    return `<span class="config-line" data-line="${lineIdx + 1}">${processedLine}</span>`;
+                }).join('');
+                
+                configHtml = `<div class="config-content" style="display: block; text-align: left;">${processedLines}</div>`;
+            }
+            
+            const optionsHtml = question.options.map((option, optIdx) => {
+                const optionId = `${questionId}-option-${optIdx}`;
+                let optionText = option.text || '';
+                optionText = optionText.replace(/^```\s*/gm, '').replace(/\s*```$/gm, '').trim();
+                
+                // 判断是否为 diff 格式
+                const isDiff = option.is_diff || false;
+                let optionContent = '';
+                let contentClass = '';
+                
+                if (isDiff) {
+                    // diff 格式：使用 formatDiffContent 格式化，使用等宽字体
+                    optionContent = formatDiffContent(optionText);
+                    contentClass = 'option-diff-content';
+                } else {
+                    // 普通文本：直接显示，使用普通字体
+                    optionContent = optionText;
+                    contentClass = 'option-text-content';
+                }
+                
+                return `
+                    <div class="option-item">
+                        <input type="checkbox" id="${optionId}" name="${questionId}-options" value="option${optIdx}">
+                        <label for="${optionId}">
+                            <div class="${contentClass}">${optionContent}</div>
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
+            return `
+                <div class="coursera-question">
+                    <div class="coursera-question-layout">
+                        <!-- 左边：问题描述和配置 -->
+                        <div class="coursera-question-left">
+                            <h4 style="margin: 0 0 15px 0; color: #667eea; text-align: left;">${texts.questionLabel} ${question.num}</h4>
+                            <div class="question-text">
+                                ${question.text}
+                            </div>
+                            <div style="text-align: left; margin-top: 15px;">
+                                ${configHtml}
+                            </div>
+                        </div>
+                        
+                        <!-- 右边：选项 -->
+                        <div class="coursera-question-right">
+                            <div class="question-options" style="text-align: left;">
+                                ${optionsHtml}
+                            </div>
+                            <!-- 底部：提示信息和 Check 按钮 -->
+                            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e9ecef; gap: 15px; min-height: 38px;">
+                                <div id="${questionId}-overall-feedback" class="coursera-overall-feedback"></div>
+                                <button class="coursera-check-btn" onclick="checkCourseraQuestion('${questionId}')">${texts.checkButton}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function processLineNumber(line) {
+            const pattern = /^(\s*)(\d+)(\s+)(.*)$/;
+            const match = line.match(pattern);
+            if (match) {
+                const leadingSpaces = match[1];
+                const lineNumber = match[2];
+                const trailingSpaces = match[3];
+                const content = match[4];
+                return `${leadingSpaces}<span class="config-line-number">${lineNumber}</span>${trailingSpaces}${content}`;
+            }
+            return line;
+        }
+
+        function processCourseraConfigLine(line, categorizedTerms, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData) {
+            let processedLine = line;
+            
+            // 处理subspec
+            if (/\[/.test(processedLine) && /\(/.test(processedLine)) {
+                processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, fieldName, subspecName) => {
+                    const subspec = subspecData[subspecName] || 'empty';
+                    let displaySubspec;
+                    
+                    // 判断是config-level还是line-level subspec
+                    if (subspecName in configSubspecData) {
+                        // Config-level: 将 Config_xxx 替换为 VAR，但对 ip/mask 字段特殊处理
+                        displaySubspec = subspec.replace(/Config_[a-zA-Z0-9_]+/g, (match) => {
+                            // 检查是否以 __ip 或 __mask 结尾
+                            if (match.endsWith('__ip')) {
+                                return 'VAR_IP';
+                            } else if (match.endsWith('__mask')) {
+                                return 'VAR_MASK';
+                            } else {
+                                return 'VAR';
+                            }
+                        });
+                    } else {
+                        // Line-level: 将 Config_xxx_Line_..._xxx 保留最后一个 _xxx 并转换为 VAR_XXX
+                        displaySubspec = subspec.replace(/Config_[a-zA-Z0-9_]+/g, (match) => {
+                            const parts = match.split('_');
+                            if (parts.length > 1) {
+                                const lastPart = parts[parts.length - 1].toUpperCase();
+                                return `VAR_${lastPart}`;
+                            }
+                            return 'VAR';
+                        });
+                    }
+                    
+                    // 获取语义概括（subspecTrans），这是语义概括，不是翻译
+                    let subspecTrans = null;
+                    if (subspecName in configSubspecData && configSubspecTransData && subspecName in configSubspecTransData) {
+                        subspecTrans = configSubspecTransData[subspecName];
+                    } else if (subspecName in lineSubspecData && lineSubspecTransData && subspecName in lineSubspecTransData) {
+                        subspecTrans = lineSubspecTransData[subspecName];
+                    }
+                    
+                    // 构建完整的tooltip内容：语义概括 + 分隔线 + 原始subspec
+                    let tooltipContent = displaySubspec;
+                    if (subspecTrans) {
+                        tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
+                    }
+                    
+                    // 判断是 line-level 还是 config-level subspec
+                    let cssClass = "config-field";
+                    let isEmpty = (subspec === 'empty');
+                    
+                    if (lineSubspecNames.has(subspecName)) {
+                        cssClass += " line-level";
+                    }
+                    
+                    if (isEmpty) {
+                        cssClass += " empty-subspec";
+                    }
+                    
+                    return `<span class="${cssClass}" data-subspec="${tooltipContent}" data-subspec-name="${subspecName}">${fieldName}</span>`;
+                });
+            }
+            
+            if (categorizedTerms) {
+                processedLine = applyCategorizedHighlighting(processedLine, categorizedTerms);
+            }
+            processedLine = applyNumberHighlighting(processedLine);
+            return processedLine;
+        }
+
+        function extractHighlightTerms(config) {
+            const terms = [];
+            const lines = config.split('\n');
+            for (const line of lines) {
+                const routeMapMatch = line.match(/route-map\s+([A-Z0-9_]+)/i);
+                if (routeMapMatch) terms.push(routeMapMatch[1]);
+                const prefixListMatch = line.match(/prefix-list\s+([a-z0-9_]+)/i);
+                if (prefixListMatch) terms.push(prefixListMatch[1]);
+                const communityListMatch = line.match(/community-list\s+([a-z0-9_]+)/i);
+                if (communityListMatch) terms.push(communityListMatch[1]);
+            }
+            return terms;
+        }
+
+        function categorizeConfigTerms(terms) {
+            const routeMaps = [];
+            const prefixLists = [];
+            const communityLists = [];
+            const otherTerms = [];
+            for (const term of terms) {
+                const trimmedTerm = term.trim();
+                if (!trimmedTerm) continue;
+                if (trimmedTerm.match(/^[A-Z0-9_]+$/)) routeMaps.push(trimmedTerm);
+                else if (trimmedTerm.includes('prefix')) prefixLists.push(trimmedTerm);
+                else if (trimmedTerm.includes('community')) communityLists.push(trimmedTerm);
+                else otherTerms.push(trimmedTerm);
+            }
+            return { routeMaps, prefixLists, communityLists, otherTerms };
+        }
+
+        function applyCategorizedHighlighting(line, categorizedTerms) {
+            let processedLine = line;
+            for (const term of categorizedTerms.routeMaps) {
+                if (term.trim()) {
+                    const highlightPattern = new RegExp('\\b' + term.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+                    processedLine = processedLine.replace(highlightPattern, `<span class="highlight-route-map">${term.trim()}</span>`);
+                }
+            }
+            for (const term of categorizedTerms.prefixLists) {
+                if (term.trim()) {
+                    const highlightPattern = new RegExp('\\b' + term.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+                    processedLine = processedLine.replace(highlightPattern, `<span class="highlight-prefix-list">${term.trim()}</span>`);
+                }
+            }
+            for (const term of categorizedTerms.communityLists) {
+                if (term.trim()) {
+                    const highlightPattern = new RegExp('\\b' + term.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+                    processedLine = processedLine.replace(highlightPattern, `<span class="highlight-community-list">${term.trim()}</span>`);
+                }
+            }
+            return processedLine;
+        }
+
+        function applyNumberHighlighting(line) {
+            let processedLine = line;
+            const subspecPlaceholders = {};
+            let placeholderCounter = 0;
+            const subspecPattern = /<span class="[^"]*" data-subspec="[^"]*" data-subspec-name="[^"]*">.*?<\/span>/g;
+            processedLine = processedLine.replace(subspecPattern, (match) => {
+                const placeholder = `__SUBSPEC_PLACEHOLDER_${placeholderCounter}__`;
+                subspecPlaceholders[placeholder] = match;
+                placeholderCounter++;
+                return placeholder;
+            });
+            processedLine = processedLine.replace(/\bseq\s+(\d+)\b/g, 'seq <span class="highlight-number">$1</span>');
+            processedLine = processedLine.replace(/\b(ge|le|eq)\s+(\d+)\b/g, '$1 <span class="highlight-number">$2</span>');
+            processedLine = processedLine.replace(/\b(\d+\.\d+\.\d+\.\d+)\/(\d+)\b/g, '<span class="highlight-number">$1</span>/<span class="highlight-number">$2</span>');
+            processedLine = processedLine.replace(/\b(\d+):(\d+)\b/g, '<span class="highlight-number">$1</span>:<span class="highlight-number">$2</span>');
+            processedLine = processedLine.replace(/\b(permit|deny)\s+(\d+)\b/g, '$1 <span class="highlight-number">$2</span>');
+            for (const [placeholder, original] of Object.entries(subspecPlaceholders)) {
+                processedLine = processedLine.replace(placeholder, original);
+            }
+            return processedLine;
+        }
+
+        // 格式化diff内容，添加颜色高亮
+        function processConfigReferences(text) {
+            const pattern = /@@\s+(R\d+)\s+Configuration\s+(\d+,\d+)\s+@@/g;
+            return text.replace(pattern, (match, router, lineRange) => {
+                return `<span class="config-reference" data-router="${router}" data-lines="${lineRange}" title="Click to highlight ${router} Configuration lines ${lineRange}">@@ ${router} Configuration ${lineRange} @@</span>`;
+            });
+        }
+
+        function formatDiffContent(diffLines) {
+            if (typeof diffLines === 'string') {
+                diffLines = diffLines.split('\n');
+            }
+            return diffLines.map(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine.startsWith('-')) {
+                    // 删除的行 - 红色
+                    return `<div class="diff-line diff-removed">${processConfigReferences(line)}</div>`;
+                } else if (trimmedLine.startsWith('+')) {
+                    // 添加的行 - 绿色
+                    return `<div class="diff-line diff-added">${processConfigReferences(line)}</div>`;
+                } else if (trimmedLine.startsWith('@@') && trimmedLine.includes('Configuration')) {
+                    // diff提示行 - 转换为可交互的配置引用
+                    return `<div class="diff-line diff-context">${processConfigReferences(line)}</div>`;
+                } else {
+                    // 普通行 - 默认颜色
+                    return `<div class="diff-line diff-context">${processConfigReferences(line)}</div>`;
+                }
+            }).join('');
+        }
+
+        function checkCourseraQuestion(questionId) {
+            const firstCheckbox = document.getElementById(`${questionId}-option-0`);
+            if (!firstCheckbox) return;
+            const questionElement = firstCheckbox.closest('.coursera-question');
+            if (!questionElement) return;
+            const checkboxes = questionElement.querySelectorAll(`input[name^="${questionId}-options"]`);
+            const courseraData = questionData.coursera[currentLanguage] || questionData.coursera['en'];
+            let currentQuestion = null;
+            const questionNum = questionElement.querySelector('h4').textContent.match(/(?:Question|问题)\s*(\d+)/);
+            if (questionNum) {
+                const num = questionNum[1];
+                currentQuestion = courseraData.questions.find(q => q.num === num);
+            }
+            if (!currentQuestion) return;
+            const correctOptions = currentQuestion.options.filter(opt => opt.correct);
+            const selectedOptions = Array.from(checkboxes).filter(cb => cb.checked);
+            const correctSelected = [];
+            selectedOptions.forEach(cb => {
+                const optionIndex = parseInt(cb.value.replace('option', ''));
+                if (currentQuestion.options[optionIndex] && currentQuestion.options[optionIndex].correct) {
+                    correctSelected.push(cb);
+                }
+            });
+            const incorrectSelected = [];
+            selectedOptions.forEach(cb => {
+                const optionIndex = parseInt(cb.value.replace('option', ''));
+                if (currentQuestion.options[optionIndex] && !currentQuestion.options[optionIndex].correct) {
+                    incorrectSelected.push(cb);
+                }
+            });
+            const overallFeedback = document.getElementById(`${questionId}-overall-feedback`);
+            if (!overallFeedback) return;
+            if (incorrectSelected.length > 0) {
+                overallFeedback.classList.add('show');
+                overallFeedback.style.background = '#f8d7da';
+                overallFeedback.style.color = '#721c24';
+                overallFeedback.style.border = '1px solid #f5c6cb';
+                overallFeedback.innerHTML = texts.courseraIncorrect;
+            } else if (correctSelected.length < correctOptions.length) {
+                overallFeedback.classList.add('show');
+                overallFeedback.style.background = '#fff3cd';
+                overallFeedback.style.color = '#856404';
+                overallFeedback.style.border = '1px solid #ffeaa7';
+                overallFeedback.innerHTML = texts.courseraIncomplete;
+            } else if (correctSelected.length === correctOptions.length && selectedOptions.length === correctOptions.length) {
+                overallFeedback.classList.add('show');
+                overallFeedback.style.background = '#d4edda';
+                overallFeedback.style.color = '#155724';
+                overallFeedback.style.border = '1px solid #c3e6cb';
+                overallFeedback.innerHTML = texts.courseraCorrect;
+            } else {
+                overallFeedback.classList.remove('show');
+            }
+        }
+
+        // Create a single global tooltip for subspecs
+        let globalTooltip = null;
+
+        function addCourseraEventListeners() {
+            // Create a single global tooltip
+            if (!globalTooltip) {
+                globalTooltip = document.createElement('div');
+                globalTooltip.className = 'tooltip';
+                document.body.appendChild(globalTooltip);
+            }
+            
+            // 添加 config-field 鼠标悬停事件，显示 subspec tooltip
+            document.querySelectorAll('.config-field').forEach(field => {
+                // Check if this field already has event listeners
+                if (field.hasAttribute('data-hover-initialized')) {
+                    return;
+                }
+                
+                field.addEventListener('mouseenter', (e) => {
+                    const subspec = field.getAttribute('data-subspec');
+                    
+                    // Always hide tooltip first to ensure clean state
+                    globalTooltip.classList.remove('show');
+                    globalTooltip.style.display = 'none';
+                    globalTooltip.style.visibility = 'hidden';
+                    globalTooltip.style.opacity = '0';
+                    
+                    // If no subspec, don't show tooltip
+                    if (!subspec) return;
+                    
+                    // Set content and force reflow
+                    globalTooltip.innerHTML = subspec;
+                    globalTooltip.style.display = 'block';
+                    
+                    // Use requestAnimationFrame to ensure Safari completes layout before positioning
+                    requestAnimationFrame(() => {
+                        // Get field position and dimensions
+                        const fieldRect = field.getBoundingClientRect();
+                        const tooltipHeight = globalTooltip.offsetHeight;
+                        
+                        // Get actual tooltip width after content is set
+                        const tooltipWidth = globalTooltip.offsetWidth;
+                        const maxTooltipWidth = 450;
+                        
+                        // Calculate tooltip position relative to the field
+                        // Center tooltip horizontally over the field
+                        let left = fieldRect.left + (fieldRect.width / 2) - (tooltipWidth / 2);
+                        // Position tooltip above the field with consistent spacing
+                        let top = fieldRect.top - tooltipHeight - 20;
+                        
+                        // Calculate arrow position (center of the field)
+                        const arrowLeft = fieldRect.left + (fieldRect.width / 2);
+                        
+                        // Ensure tooltip stays within viewport bounds horizontally
+                        if (left < 10) {
+                            left = 10;
+                        } else if (left + tooltipWidth > window.innerWidth - 10) {
+                            left = window.innerWidth - tooltipWidth - 10;
+                        }
+                        
+                        // Adjust vertical position if tooltip would go off-screen
+                        let arrowPosition = 'bottom'; // Default: arrow points down from tooltip
+                        if (top < 10) {
+                            // Tooltip goes below the field
+                            top = fieldRect.bottom + 20;
+                            arrowPosition = 'top'; // Arrow points up from tooltip
+                        }
+                        
+                        // Set arrow position and style
+                        if (arrowPosition === 'top') {
+                            // Tooltip is below the field: arrow should be above the tooltip and point up
+                            globalTooltip.style.setProperty('--arrow-top', '-12px');
+                            // Bottom border colored → triangle points up
+                            globalTooltip.style.setProperty('--arrow-border', 'transparent transparent #2c3e50 transparent');
+                        } else {
+                            // Arrow at bottom of tooltip, pointing down
+                            globalTooltip.style.setProperty('--arrow-top', '100%');
+                            globalTooltip.style.setProperty('--arrow-border', '#2c3e50 transparent transparent transparent');
+                        }
+                        
+                        // Calculate arrow horizontal position relative to tooltip
+                        // Use actual tooltip width for accurate positioning
+                        const arrowOffset = arrowLeft - left;
+                        const minArrowPos = 20;
+                        const maxArrowPos = tooltipWidth - 20;
+                        globalTooltip.style.setProperty('--arrow-left', Math.max(minArrowPos, Math.min(maxArrowPos, arrowOffset)) + 'px');
+                        
+                        // Set final position and show tooltip immediately
+                        globalTooltip.style.left = left + 'px';
+                        globalTooltip.style.top = top + 'px';
+                        globalTooltip.style.visibility = 'visible';
+                        globalTooltip.style.opacity = '1';
+                        globalTooltip.classList.add('show');
+                    });
+                });
+                
+                field.addEventListener('mouseleave', (e) => {
+                    // Always hide tooltip when leaving a field
+                    globalTooltip.classList.remove('show');
+                    globalTooltip.style.display = 'none';
+                    globalTooltip.style.visibility = 'hidden';
+                    globalTooltip.style.opacity = '0';
+                });
+                
+                // Mark this field as initialized
+                field.setAttribute('data-hover-initialized', 'true');
+            });
+            
+            // 添加 config-reference 点击事件，高亮配置行
+            document.querySelectorAll('.config-reference').forEach(ref => {
+                ref.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const router = this.getAttribute('data-router');
+                    const lines = this.getAttribute('data-lines');
+                    if (!router || !lines) return;
+                    
+                    // 解析行号范围
+                    const lineNumbers = lines.split(',').map(num => parseInt(num.trim()));
+                    
+                    // 高亮对应的配置行
+                    document.querySelectorAll('.config-line').forEach(line => {
+                        const lineNum = parseInt(line.getAttribute('data-line'));
+                        if (lineNumbers.includes(lineNum)) {
+                            line.style.backgroundColor = '#fff3cd';
+                            line.style.transition = 'background-color 0.3s';
+                            setTimeout(() => {
+                                line.style.backgroundColor = '';
+                            }, 2000);
+                        }
+                    });
+                });
+            });
+        }
+
+        // 浏览器检测和字体粗细调整
+        function detectBrowserAndAdjustFontWeight() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const body = document.body;
+            
+            // 移除之前的浏览器类
+            body.classList.remove('browser-chrome', 'browser-edge', 'browser-safari', 'browser-firefox', 'browser-other');
+            
+            // 简化的Safari检测
+            const isSafari = userAgent.includes('safari') && !userAgent.includes('chrome');
+            const isFirefox = userAgent.includes('firefox');
+            const isChrome = userAgent.includes('chrome') || userAgent.includes('edg');
+            
+            if (isSafari) {
+                body.classList.add('browser-safari');
+            } else if (isFirefox) {
+                body.classList.add('browser-firefox');
+            } else if (isChrome) {
+                body.classList.add('browser-chrome');
+            } else {
+                body.classList.add('browser-other');
+            }
+        }
+
+        // Initialize
+        detectBrowserAndAdjustFontWeight();
+        showCourseraPage();
+    </script>
+</body>
+</html>

@@ -72,13 +72,13 @@
             letter-spacing: -0.2px;
             text-align: right;
             padding-right: 20px;
-            width: 350px;
+            width: 220px;
             vertical-align: middle;
             white-space: nowrap;
         }
         
         .content-cell {
-            padding-left: 20px;
+            padding-left: 10px;
             vertical-align: middle;
             text-align: left;
         }
@@ -185,52 +185,6 @@
         
         .hidden {
             display: none;
-        }
-        
-        
-        .video-links {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .video-link {
-            padding: 6px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            min-width: 80px;
-        }
-        
-        .video-link.bilibili {
-            background: #fb7299;
-            color: white;
-        }
-        
-        .video-link.youtube {
-            background: #e53e3e;
-            color: white;
-        }
-        
-        .video-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .platform {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .lang {
-            font-size: 12px;
-            opacity: 0.9;
-            font-weight: 700;
         }
         
         /* Modal Styles */
@@ -347,52 +301,6 @@
                     <div class="separator-line"></div>
                 </td>
             </tr>
-            <tr>
-                <td class="label-cell" id="backgroundTitle">Video of background introduction</td>
-                <td class="content-cell">
-                    <div class="video-links">
-                        <a href="https://www.youtube.com/watch?v=mZsDmN9AtN8" class="video-link youtube" target="_blank">
-                            <span class="platform">YouTube</span>
-                            <span class="lang">English</span>
-                        </a>
-                        <a href="https://www.youtube.com/watch?v=D9llwLMWvBs" class="video-link youtube" target="_blank">
-                            <span class="platform">YouTube</span>
-                            <span class="lang">中文</span>
-                        </a>
-                        <a href="https://www.bilibili.com/video/BV1uFWRzLE63/" class="video-link bilibili" target="_blank">
-                            <span class="platform">Bilibili</span>
-                            <span class="lang">English</span>
-                        </a>
-                        <a href="https://www.bilibili.com/video/BV1uokUBoEJC" class="video-link bilibili" target="_blank">
-                            <span class="platform">Bilibili</span>
-                            <span class="lang">中文</span>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="label-cell" id="frameworkTitle">Video of framework introduction</td>
-                <td class="content-cell">
-                    <div class="video-links">
-                        <a href="https://www.youtube.com/watch?v=ip4DJUXGFaE" class="video-link youtube" target="_blank">
-                            <span class="platform">YouTube</span>
-                            <span class="lang">English</span>
-                        </a>
-                        <a href="https://www.youtube.com/watch?v=x7AmC7-VZ_4" class="video-link youtube" target="_blank">
-                            <span class="platform">YouTube</span>
-                            <span class="lang">中文</span>
-                        </a>
-                        <a href="https://www.bilibili.com/video/BV1bFWRzVEUE/" class="video-link bilibili" target="_blank">
-                            <span class="platform">Bilibili</span>
-                            <span class="lang">English</span>
-                        </a>
-                        <a href="https://www.bilibili.com/video/BV1uokUBoEEP" class="video-link bilibili" target="_blank">
-                            <span class="platform">Bilibili</span>
-                            <span class="lang">中文</span>
-                        </a>
-                    </div>
-                </td>
-            </tr>
         </table>
         
         <div class="group-info" id="groupInfo">
@@ -427,10 +335,8 @@
                 inputTitle: 'Enter the provided 4-digit number',
                 startText: 'Start',
                 placeholder: '1234',
-                backgroundTitle: 'Video of background introduction',
-                frameworkTitle: 'Video of framework introduction',
-                confirmTitle: 'Please watch the introduction videos',
-                confirmText: 'Please watch both introduction videos before starting the user study.',
+                confirmTitle: 'Confirm to start',
+                confirmText: 'Are you ready to start the user study?',
                 confirmCancel: 'Cancel',
                 confirmStart: 'Start User Study'
             },
@@ -439,10 +345,8 @@
                 inputTitle: '输入您获得的4位数字',
                 startText: '开始',
                 placeholder: '1234',
-                backgroundTitle: '背景介绍视频',
-                frameworkTitle: '系统介绍视频',
-                confirmTitle: '请您观看完两个介绍视频',
-                confirmText: '请您观看完两个介绍视频后，再开始进行用户研究',
+                confirmTitle: '确认开始',
+                confirmText: '您准备好开始用户研究了吗？',
                 confirmCancel: '取消',
                 confirmStart: '开始用户研究'
             }
@@ -468,8 +372,6 @@
             document.getElementById('inputTitle').textContent = t.inputTitle;
             document.getElementById('startText').textContent = t.startText;
             document.getElementById('userNumber').placeholder = t.placeholder;
-            document.getElementById('backgroundTitle').textContent = t.backgroundTitle;
-            document.getElementById('frameworkTitle').textContent = t.frameworkTitle;
             document.getElementById('confirm-title').textContent = t.confirmTitle;
             document.getElementById('confirm-text').textContent = t.confirmText;
             document.getElementById('confirm-cancel').textContent = t.confirmCancel;
