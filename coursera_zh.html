@@ -34,11 +34,45 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .header h1 {
             font-size: 2.2em;
             margin-bottom: 10px;
+        }
+        
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: 2px solid white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: #667eea;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .lang-btn.active:hover {
+            background: white;
         }
 
         .coursera-question {
@@ -407,6 +441,10 @@
 <body>
     <div class="container">
         <div class="header">
+            <div class="language-switcher">
+                <button class="lang-btn" id="lang-en" onclick="switchLanguage('en')">English</button>
+                <button class="lang-btn active" id="lang-zh" onclick="switchLanguage('zh')">中文</button>
+            </div>
             <h1 id="header-title">基于子规约的可解释网络验证 - 用户研究</h1>
         </div>
 
@@ -446,7 +484,21 @@
             }
         };
 
-        // Language switching removed - separate files for each language
+        // Language switching function
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            texts = textConstants[lang];
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Update header title
+            document.getElementById('header-title').textContent = texts.title;
+            
+            // Reload page content
+            showCourseraPage();
+        }
 
         function showCourseraPage() {
             const courseraData = questionData.coursera[currentLanguage] || questionData.coursera['en'];
