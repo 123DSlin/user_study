@@ -11068,7 +11068,15 @@ other_network
             userNotes.push(userNote);
             
             closeConfirmModal();
-            showQuestion(currentQuestionIndex + 1);
+            
+            // 清除固定工具栏内容，并滚动到页面顶部
+            clearFixedTopBar();
+            window.scrollTo(0, 0);
+            
+            // 延迟一小段时间确保清除完成后再显示下一题
+            setTimeout(() => {
+                showQuestion(currentQuestionIndex + 1);
+            }, 100);
         }
 
         // 关闭确认模态框
@@ -11345,22 +11353,17 @@ other_network
             document.getElementById('answerPagesContainer').style.display = 'none';
             answerPagesVisible = false;
             
-            // Hide fixed top bar when returning to completion screen
-            const fixedTopBar = document.getElementById('fixedTopBar');
-            const container = document.querySelector('.container');
-            if (fixedTopBar) {
-                fixedTopBar.classList.remove('visible');
-            }
-            if (container) {
-                container.style.paddingTop = '';
-            }
-            
-            // 滚动到页面顶部
+            // 清除固定工具栏内容，并滚动到页面顶部
+            clearFixedTopBar();
             window.scrollTo(0, 0);
         }
 
         // Show completion screen
         function showCompletionScreen() {
+            // 清除固定工具栏内容，并滚动到页面顶部
+            clearFixedTopBar();
+            window.scrollTo(0, 0);
+            
             isOnCompletionScreen = true;
             totalTime = Date.now() - startTime;
             
@@ -11748,15 +11751,8 @@ other_network
             document.getElementById('testContent').innerHTML = completionHtml;
             document.querySelector('.progress-bar').style.display = 'none';
             
-            // Hide fixed top bar on completion screen
-            const fixedTopBar = document.getElementById('fixedTopBar');
-            const container = document.querySelector('.container');
-            if (fixedTopBar) {
-                fixedTopBar.classList.remove('visible');
-            }
-            if (container) {
-                container.style.paddingTop = '';
-            }
+            // 确保固定工具栏已清除（已在函数开始时调用 clearFixedTopBar()，这里再次确保）
+            clearFixedTopBar();
             
             // Hide language switcher on completion screen
             hideLanguageSwitcher();
@@ -12219,6 +12215,29 @@ other_network
             }
             
             return result + (textAfter ? ' ' + textAfter : '');
+        }
+        
+        // 清除固定工具栏内容
+        function clearFixedTopBar() {
+            const fixedTopBar = document.getElementById('fixedTopBar');
+            const fixedTopologyMini = document.getElementById('fixedTopologyMini');
+            const fixedSpecFirstLine = document.getElementById('fixedSpecFirstLine');
+            
+            if (fixedTopBar) {
+                fixedTopBar.classList.remove('visible');
+            }
+            if (fixedTopologyMini) {
+                fixedTopologyMini.innerHTML = '';
+            }
+            if (fixedSpecFirstLine) {
+                fixedSpecFirstLine.innerHTML = '';
+            }
+            
+            // 重置容器 padding
+            const container = document.querySelector('.container');
+            if (container) {
+                container.style.paddingTop = '';
+            }
         }
         
         // 更新固定工具栏内容
