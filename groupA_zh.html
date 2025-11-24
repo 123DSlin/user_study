@@ -2789,7 +2789,7 @@ network_198_51_100_0
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -3587,7 +3587,7 @@ other_network
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -4446,7 +4446,7 @@ other_network
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -5252,7 +5252,7 @@ other_network
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -5271,8 +5271,8 @@ option1: [no]
 \`\`\`
   @@ R3 Configuration 9,10 @@
   ip prefix-list private_ips seq 5  \\
--         permit [192.168.0.0/16]   [ge 16] le 32
-+         permit [192.168.128.0/24] [ge 24] le 32
+-         permit [192.168.0.0/16]   ge 24 le 32
++         permit [192.168.128.0/24] ge 24 le 32
 <br>
   @@ R3 Configuration 14,15 @@
   route-map R3_IN_FROM_Customer deny 10
@@ -5283,8 +5283,8 @@ option2: [yes]
 \`\`\`diff
   @@ R3 Configuration 9,10 @@
   ip prefix-list private_ips seq 5  \\
--         permit [192.168.0.0/16]   [ge 16] [le 32]
-+         permit [192.168.128.0/23] [ge 24] [le 28]
+-         permit 192.168.0.0/16 ge 24 [le 32]
++         permit 192.168.0.0/16 ge 24 [le 24]
 <br>
   @@ R3 Configuration 14,15 @@
   route-map R3_IN_FROM_Customer deny 10
@@ -5295,8 +5295,8 @@ option3: [yes]
 \`\`\`diff
   @@ R3 Configuration 9,10 @@
   ip prefix-list private_ips seq 5  \\
--         permit 192.168.0.0/16 [ge 16] [le 32]
-+         permit 192.168.0.0/16 [ge 24] [le 24]
+-         permit [192.168.0.0/16]   [ge 24] [le 32]
++         permit [192.168.128.0/23] [ge 23] [le 28]
 <br>
   @@ R3 Configuration 14,15 @@
   route-map R3_IN_FROM_Customer deny 10
@@ -5867,7 +5867,7 @@ Subspecs (1):
 Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. (or (= ((_ extract 31 8) |0_dst-ip|) #xc0a880) (= ((_ extract 31 8) |0_dst-ip|) #xc0a881)) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))))
-  1. prefix cover 192.168.128.0/23 (aggregated from 192.168.128.0/24 and 192.168.129.0/24)
+  1. prefix cover 192.168.128.0/23 <br>(aggregated from 192.168.128.0/24 and 192.168.129.0/24)
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__203_0_113_0__ip
@@ -5930,7 +5930,7 @@ Subspecs (1):
 Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. (>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length 0) <b>AND</b> <br>(<= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length 32) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end 0) <b>AND</b> <br>(<= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end 32) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start 0) <b>AND</b> <br>(<= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start 32) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length) <b>AND</b> <br>(or (= ((_ extract 31 8) |0_dst-ip|) #xc0a880) (= ((_ extract 31 8) |0_dst-ip|) #xc0a881)) <b>AND</b> <br>(>= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) <b>AND</b> <br>(<= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end) <b>AND</b> <br>(= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask)))) <b>AND</b> <br>(= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action true)
-  1. permit <b>AND</b> <br>prefix cover 192.168.128.0/23 (aggregated from 192.168.128.0/24 and 192.168.129.0/24) <b>AND</b> <br>prefix ge range = 0~24 <b>AND</b> <br>prefix le range = 24~32 <b>AND</b> <br>prefix ge/le range >= prefix length
+  1. permit <b>AND</b> <br>prefix cover 192.168.128.0/23 <br>(aggregated from 192.168.128.0/24 and 192.168.129.0/24) <b>AND</b> <br>prefix ge range = 0~24 <b>AND</b> <br>prefix le range = 24~32 <b>AND</b> <br>prefix ge/le range >= prefix length
 --------------------------------------------------
 
 Line Group: Config_r2_RouteFilterList_isp2_network__Line1
@@ -6138,7 +6138,7 @@ network_198_51_100_0
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -6944,7 +6944,7 @@ other_network
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -7824,7 +7824,7 @@ other_network
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -8642,7 +8642,7 @@ other_network
  7 [ip prefix-list](Config_r3_RouteFilterList_default_ips__Line1) default_ips seq 5 [permit](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action) [0.0.0.0/0](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip) [le 32](Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end)
  8 !
  9 [ip prefix-list](Config_r3_RouteFilterList_private_ips__Line1) private_ips seq 5  \\
-10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
+10         [permit](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action) [192.168.0.0/16](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) [ge 24](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) [le 32](Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end)
 11 !
 12 !
 13 !!! BGP import policy on R3 from Customer (R3 <- Customer) !!!
@@ -8661,8 +8661,8 @@ option1: [no]
 \`\`\`
   @@ R3 Configuration 9,10 @@
   ip prefix-list private_ips seq 5  \\
--         permit [192.168.0.0/16]   [ge 16] le 32
-+         permit [192.168.128.0/24] [ge 24] le 32
+-         permit [192.168.0.0/16]   ge 24 le 32
++         permit [192.168.128.0/24] ge 24 le 32
 <br>
   @@ R3 Configuration 14,15 @@
   route-map R3_IN_FROM_Customer deny 10
@@ -8673,8 +8673,8 @@ option2: [yes]
 \`\`\`diff
   @@ R3 Configuration 9,10 @@
   ip prefix-list private_ips seq 5  \\
--         permit [192.168.0.0/16]   [ge 16] [le 32]
-+         permit [192.168.128.0/23] [ge 24] [le 28]
+-         permit 192.168.0.0/16 ge 24 [le 32]
++         permit 192.168.0.0/16 ge 24 [le 24]
 <br>
   @@ R3 Configuration 14,15 @@
   route-map R3_IN_FROM_Customer deny 10
@@ -8685,8 +8685,8 @@ option3: [yes]
 \`\`\`diff
   @@ R3 Configuration 9,10 @@
   ip prefix-list private_ips seq 5  \\
--         permit 192.168.0.0/16 [ge 16] [le 32]
-+         permit 192.168.0.0/16 [ge 24] [le 24]
+-         permit [192.168.0.0/16]   [ge 24] [le 32]
++         permit [192.168.128.0/23] [ge 23] [le 28]
 <br>
   @@ R3 Configuration 14,15 @@
   route-map R3_IN_FROM_Customer deny 10
@@ -9028,122 +9028,122 @@ Subspecs (1):
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line1__192_0_2_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line1__192_0_2_0__length
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line1__192_0_2_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line1__192_0_2_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line2__198_51_100_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line2__198_51_100_0__length
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line2__198_51_100_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line2__198_51_100_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_other_network__Line1__203_0_113_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_other_network__Line1__203_0_113_0__length
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_other_network__Line1__203_0_113_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_other_network__Line1__203_0_113_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RoutingPolicy_R1_IN_FROM_ISP1__Line1__add_community_400_100_community
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RoutingPolicy_R1_IN_FROM_ISP1__Line2__add_community_400_100_community
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_CommunityList_500200__Line1__exact_community_500_200_action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RoutingPolicy_R2_OUT_TO_R3__Line1__prepend_aspath_cost
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__length
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action
@@ -9154,7 +9154,7 @@ Subspecs (1):
 
 Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end
@@ -9172,104 +9172,104 @@ Subspecs (1):
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__203_0_113_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__203_0_113_0__length
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__203_0_113_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__203_0_113_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RoutingPolicy_R2_IN_FROM_ISP2__Line1__add_community_500_200_community
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_CommunityList_500200__Line1__exact_community_500_200_action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_end
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__prefix_range_start
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_CommunityList_400100__Line1__exact_community_400_100_400_100_community
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_CommunityList_400100__Line1__exact_community_400_100_action
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line1__192_0_2_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_isp1_network__Line2__198_51_100_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_other_network__Line1__203_0_113_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_default_ips__Line1__0_0_0_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_default_ips__Line1__0_0_0_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip
 Subspecs (1):
   1. (or (= ((_ extract 31 8) |0_dst-ip|) #xc0a880) (= ((_ extract 31 8) |0_dst-ip|) #xc0a881)) AND (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))))
   1. prefix cover 192.168.128.0/23 (aggregated from 192.168.128.0/24 and 192.168.129.0/24)
-  1. 基础网络前缀应包含 192.168.128.0/23 (由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成)
+  1. 基础网络前缀应包含 192.168.128.0/23 <br>(由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成)
 --------------------------------------------------
 
 Config Variable: Config_r2_RouteFilterList_isp2_network__Line1__203_0_113_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------
 
 Config Variable: Config_r1_RouteFilterList_default_ips__Line1__0_0_0_0__ip
 Subspecs (1):
-  1. unrestricted
+  1. 与规约无关，无限制
 --------------------------------------------------`,
                     lineSubspecTrans: `Line-Level Subspecs
 ==================
@@ -9323,7 +9323,7 @@ Line Group: Config_r3_RouteFilterList_private_ips__Line1
 Subspecs (1):
   1. (>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length 0) <b>AND</b> <br>(<= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length 32) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end 0) <b>AND</b> <br>(<= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end 32) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start 0) <b>AND</b> <br>(<= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start 32) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length) <b>AND</b> <br>(>= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__length) <b>AND</b> <br>(or (= ((_ extract 31 8) |0_dst-ip|) #xc0a880) (= ((_ extract 31 8) |0_dst-ip|) #xc0a881)) <b>AND</b> <br>(>= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_start) <b>AND</b> <br>(<= 24 Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__prefix_range_end) <b>AND</b> <br>(= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask))) (bvnot (bvor (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__ip) (bvnot Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__mask)))) <b>AND</b> <br>(= Config_r3_RouteFilterList_private_ips__Line1__192_168_0_0__action true)
   1. permit <b>AND</b> <br>prefix cover 192.168.128.0/23 (aggregated from 192.168.128.0/24 and 192.168.129.0/24) <b>AND</b> <br>prefix ge range = 0~24 <b>AND</b> <br>prefix le range = 24~32 <b>AND</b> <br>prefix ge/le range >= prefix length
-  1. permit <b>AND</b> <br>基础网络前缀应包含 192.168.128.0/23 (由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成) <b>AND</b> <br>最小 (ge) 前缀长度范围为 0~24 <b>AND</b> <br>最大 (le) 前缀长度范围为 24~32 <b>AND</b> <br>最小 (ge) 与最大 (le) 前缀长度 >= 基础网络前缀长度
+  1. permit <b>AND</b> <br>基础网络前缀应包含 192.168.128.0/23 <br>(由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成) <b>AND</b> <br>最小 (ge) 前缀长度范围为 0~24 <b>AND</b> <br>最大 (le) 前缀长度范围为 24~32 <b>AND</b> <br>最小 (ge) 与最大 (le) 前缀长度 >= 基础网络前缀长度
 --------------------------------------------------
 
 Line Group: Config_r2_RouteFilterList_isp2_network__Line1
