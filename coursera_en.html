@@ -457,6 +457,19 @@
             font-weight: 600 !important;
         }
 
+        /* Chrome/Edge/Other specific font-weight for categorized highlights */
+        .browser-chrome .highlight-route-map,
+        .browser-edge .highlight-route-map,
+        .browser-other .highlight-route-map,
+        .browser-chrome .highlight-prefix-list,
+        .browser-edge .highlight-prefix-list,
+        .browser-other .highlight-prefix-list,
+        .browser-chrome .highlight-community-list,
+        .browser-edge .highlight-community-list,
+        .browser-other .highlight-community-list {
+            font-weight: 700 !important;
+        }
+
     </style>
 </head>
 <body>
@@ -784,11 +797,14 @@
             const terms = [];
             const lines = config.split('\n');
             for (const line of lines) {
-                const routeMapMatch = line.match(/route-map\s+([A-Z0-9_]+)/i);
+                // 提取 route-map name（支持大小写混合）
+                const routeMapMatch = line.match(/route-map\s+([A-Za-z0-9_]+)/i);
                 if (routeMapMatch) terms.push(routeMapMatch[1]);
-                const prefixListMatch = line.match(/prefix-list\s+([a-z0-9_]+)/i);
+                // 提取 prefix-list name（支持大小写混合，支持带或不带 ip 前缀）
+                const prefixListMatch = line.match(/(?:ip\s+)?prefix-list\s+([A-Za-z0-9_]+)/i);
                 if (prefixListMatch) terms.push(prefixListMatch[1]);
-                const communityListMatch = line.match(/community-list\s+([a-z0-9_]+)/i);
+                // 提取 community-list name（支持大小写混合，支持带或不带 ip 前缀）
+                const communityListMatch = line.match(/(?:ip\s+)?community-list\s+([A-Za-z0-9_]+)/i);
                 if (communityListMatch) terms.push(communityListMatch[1]);
             }
             return terms;
@@ -802,10 +818,21 @@
             for (const term of terms) {
                 const trimmedTerm = term.trim();
                 if (!trimmedTerm) continue;
-                if (trimmedTerm.match(/^[A-Z0-9_]+$/)) routeMaps.push(trimmedTerm);
-                else if (trimmedTerm.includes('prefix')) prefixLists.push(trimmedTerm);
-                else if (trimmedTerm.includes('community')) communityLists.push(trimmedTerm);
-                else otherTerms.push(trimmedTerm);
+                // 路由策略模式：R1_IN_FROM_ISP1, R2_OUT_TO_R3 等，或全大写字母数字下划线
+                if (/R\d+_(IN|OUT)_(FROM|TO)_\w+/.test(trimmedTerm) || /^[A-Z0-9_]+$/.test(trimmedTerm)) {
+                    routeMaps.push(trimmedTerm);
+                }
+                // 前缀列表模式：isp1_network, private_ips, network_10_0_0_0 等，或包含 prefix
+                else if (/(default_ips|isp\d+_network|other_network|private_ips|network_\d+_\d+_\d+_\d+)/.test(trimmedTerm) || trimmedTerm.toLowerCase().includes('prefix')) {
+                    prefixLists.push(trimmedTerm);
+                }
+                // 社区列表模式：纯数字，或包含 community
+                else if (/^\d+$/.test(trimmedTerm) || trimmedTerm.toLowerCase().includes('community')) {
+                    communityLists.push(trimmedTerm);
+                }
+                else {
+                    otherTerms.push(trimmedTerm);
+                }
             }
             return { routeMaps, prefixLists, communityLists, otherTerms };
         }
