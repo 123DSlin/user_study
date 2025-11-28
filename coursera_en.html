@@ -51,26 +51,27 @@
         }
         
         .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
             padding: 8px 16px;
-            font-size: 14px;
-            border: 2px solid white;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: bold;
         }
-        
-        .lang-btn.active {
-            background: white;
-            color: #667eea;
-        }
-        
+
         .lang-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
-        
+
+        .lang-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
         .lang-btn.active:hover {
             background: white;
         }
@@ -328,7 +329,7 @@
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-size: 14px;
             font-weight: 600;
-            max-width: 450px;
+            max-width: 500px;
             z-index: 10000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             opacity: 0;
@@ -1022,7 +1023,7 @@
                         
                         // Get actual tooltip width after content is set
                         const tooltipWidth = globalTooltip.offsetWidth;
-                        const maxTooltipWidth = 450;
+                        const maxTooltipWidth = 500;
                         
                         // Calculate tooltip position relative to the field
                         // Center tooltip horizontally over the field
