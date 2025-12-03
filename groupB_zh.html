@@ -2705,16 +2705,16 @@ option3: [no]
 192.0.2.0/24
 198.51.100.0/24
 \`\`\``,
-                answer: `1. ISP1 advertises two routes to its eBGP peer R1:
-  * 192.0.2.0/24
-  * 198.51.100.0/24
-2. R1 applies the inbound route policy R1_IN_FROM_ISP1 to control the routes received from ISP1 and their attributes, and sets the community value:
-  * 192.0.2.0/24 (with 400:100 community)
-  * 198.51.100.0/24 (with 500:200 community)
-3. Since the two network prefixes have only one available route, R1 selects both routes as the best routes.
-4. R1 applies the outbound route policy R1_OUT_TO_Customer to control the routes advertised to Customer and their attributes, allowing only routes with the 400:100 community:
-  * 192.0.2.0/24 (with 400:100 community)
-5. Therefore, Customer receives the ISP1-advertised prefix 192.0.2.0/24.`,
+                answer: `<br>1. ISP1 advertises two routes to its eBGP peer R1:
+&nbsp;&nbsp;&nbsp;&nbsp;* 192.0.2.0/24
+&nbsp;&nbsp;&nbsp;&nbsp;* 198.51.100.0/24
+<br>2. R1 applies the inbound route policy R1_IN_FROM_ISP1 to control the routes received from ISP1 and their attributes, and sets the community value:
+&nbsp;&nbsp;&nbsp;&nbsp;* 192.0.2.0/24 (with 400:100 community)
+&nbsp;&nbsp;&nbsp;&nbsp;* 198.51.100.0/24 (with 500:200 community)
+<br>3. Since the two network prefixes have only one available route, R1 selects both routes as the best routes.
+<br>4. R1 applies the outbound route policy R1_OUT_TO_Customer to control the routes advertised to Customer and their attributes, allowing only routes with the 400:100 community:
+&nbsp;&nbsp;&nbsp;&nbsp;* 192.0.2.0/24 (with 400:100 community)
+<br>5. Therefore, Customer receives the ISP1-advertised prefix 192.0.2.0/24.`,
                 configSubspec: ``,
                 lineSubspec: ``,
                 configSubspecTrans: ``,
@@ -2862,15 +2862,12 @@ option3: [yes]
    match ip address prefix-list other_network
 -  set community 400:100 additive
 \`\`\``,
-                answer: `All three options involve removing an entire configuration line, so we analyze them based on the line-level subspecifications.
-
-<b>Option 1:</b>
+                answer: `<br>All three options involve removing an entire configuration line, so we analyze them based on the line-level subspecifications.
+<br><b>Option 1:</b>
 The configuration line to be removed has a non-empty line-level subspec. This means the configuration line is relevant to the previously verified network specification and cannot be removed freely. Therefore, removing it may cause the configuration to violate the previously verified specification.
-
-<b>Option 2:</b>
+<br><b>Option 2:</b>
 The configuration line to be removed has an empty line-level subspec. Since the configuration line is unrelated to the previously verified network specification, it can be safely removed.
-
-<b>Option 3:</b>
+<br><b>Option 3:</b>
 Similarly, the configuration line to be removed has an empty line-level subspec. Since the configuration line is unrelated to the previously verified network specification, it can be safely removed.`,
                 configSubspec: `Config-Level Subspecs
 ====================
@@ -3666,15 +3663,12 @@ option3: [yes]
   route-map R1_OUT_TO_ISP1 deny 10
    match community 500200
 \`\`\``,
-                answer: `Option 1 involves removing an entire configuration line, so we analyze it based on the line-level subspecification. Options 2 and 3 involve modifying a single configuration field, so we analyze them based on the field-level subspecifications.
-
-<b>Option 1:</b>
+                answer: `<br>Option 1 involves removing an entire configuration line, so we analyze it based on the line-level subspecification. Options 2 and 3 involve modifying a single configuration field, so we analyze them based on the field-level subspecifications.
+<br><b>Option 1:</b>
 The configuration line to be removed has a non-empty line-level subspec. This means the configuration line is relevant to the previously verified network specification. Therefore, removing it may cause the configuration to violate the previously verified specification.
-
-<b>Option 2:</b>
+<br><b>Option 2:</b>
 The community-list community field to be modified has a field-level subspec "community = 400:100". The field is modified to "500:200", which exceeds the range allowed by the subspec. Therefore, modifying it may cause the configuration to violate the previously verified specification.
-
-<b>Option 3:</b>
+<br><b>Option 3:</b>
 The community-list action field to be modified has a field-level subspec "permit". The field is modified to "deny", which exceeds the range allowed by the subspec. Therefore, modifying it may cause the configuration to violate the previously verified specification.`,
                 configSubspec: `Config-Level Subspecs
 ====================
@@ -4528,15 +4522,12 @@ option3: [yes]
 -  set as-path prepend [200]
 +  set as-path prepend [100]
 \`\`\``,
-                answer: `All three options involve modifying a single configuration field, so we analyze them based on the field-level subspecifications.
-
-<b>Option 1:</b>
+                answer: `<br>All three options involve modifying a single configuration field, so we analyze them based on the field-level subspecifications.
+<br><b>Option 1:</b>
 The community-list community field to be modified has a field-level subspec "community = 500:200". The field is modified to "400:100", which exceeds the range allowed by the subspec. Therefore, modifying it may cause the configuration to violate the previously verified specification.
-
-<b>Option 2:</b>
+<br><b>Option 2:</b>
 The prepend AS-path field to be modified has a field-level subspec "prepending AS-path length = 1". The field is modified to "200 100 (prepending AS-path length = 2)", which exceeds the range allowed by the subspec. Therefore, modifying it may cause the configuration to violate the previously verified specification.
-
-<b>Option 3:</b>
+<br><b>Option 3:</b>
 The prepend AS-path field to be modified has a field-level subspec "prepending AS-path length = 1". The field is modified to "100 (prepending AS-path length = 1)", which is within the range allowed by the subspec. Therefore, modifying it ensures the configuration remains compliant with the previously verified specification.`,
                 configSubspec: `Config-Level Subspecs
 ====================
@@ -5347,19 +5338,16 @@ option3: [yes]
   route-map R3_IN_FROM_Customer deny 10
    match ip address prefix-list private_ips
 \`\`\``,
-                answer: `Options 1 and 2 involve modifying a single configuration field, so we analyze them based on the field-level subspecifications. Option 3 involves modifying multiple configuration fields, so we analyze it based on the line-level subspecification.
-
-<b>Option 1:</b>
+                answer: `<br>Options 1 and 2 involve modifying a single configuration field, so we analyze them based on the field-level subspecifications. Option 3 involves modifying multiple configuration fields, so we analyze it based on the line-level subspecification.
+<br><b>Option 1:</b>
 The prefix-list network prefix field to be modified has a field-level subspec "prefix cover 192.168.128.0/23 (aggregated from 192.168.128.0/24 and 192.168.129.0/24)". The field is modified to "192.168.128.0/24 (does not cover 192.168.129.0/24)", which exceeds the range allowed by the subspec. Therefore, modifying it may cause the configuration to violate the previously verified specification.
-
-<b>Option 2:</b>
+<br><b>Option 2:</b>
 The prefix-list le range field to be modified has a field-level subspec "prefix le range = 24~32". The field is modified to "le 24", which is within the range allowed by the subspec. Therefore, modifying it ensures the configuration remains compliant with the previously verified specification.
-
-<b>Option 3:</b>
+<br><b>Option 3:</b>
 The prefix-list configuration line to be modified has a line-level subspec "permit AND prefix cover 192.168.128.0/23 (aggregated from 192.168.128.0/24 and 192.168.129.0/24) AND prefix ge range = 0~24 AND prefix le range = 24~32 AND prefix ge/le range >= prefix length":
-  * The prefix-list network prefix field has the localized constraint "prefix cover 192.168.128.0/24 (aggregated from 192.168.128.0/24 and 192.168.129.0/24)". The field is modified to "192.168.128.0/23", which is within the range allowed by the subspec.
-  * The prefix-list ge range field has the localized constraint "prefix ge range = 0~24 AND prefix ge range >= prefix length". The field is modified to "ge 23", which is within the range allowed by the subspec.
-  * The prefix-list le range field has the localized constraint "prefix le range = 24~32 AND prefix le range >= prefix length". The field is modified to "le 28", which is within the range allowed by the subspec.
+&nbsp;&nbsp;&nbsp;&nbsp;* The prefix-list network prefix field has the localized constraint "prefix cover 192.168.128.0/24 (aggregated from 192.168.128.0/24 and 192.168.129.0/24)". The field is modified to "192.168.128.0/23", which is within the range allowed by the subspec.
+&nbsp;&nbsp;&nbsp;&nbsp;* The prefix-list ge range field has the localized constraint "prefix ge range = 0~24 AND prefix ge range >= prefix length". The field is modified to "ge 23", which is within the range allowed by the subspec.
+&nbsp;&nbsp;&nbsp;&nbsp;* The prefix-list le range field has the localized constraint "prefix le range = 24~32 AND prefix le range >= prefix length". The field is modified to "le 28", which is within the range allowed by the subspec.
 Therefore, modifying them ensures the configuration remains compliant with the previously verified specification.`,
                 configSubspec: `Config-Level Subspecs
 ====================
@@ -6080,14 +6068,16 @@ option3: [no]
 192.0.2.0/24
 198.51.100.0/24
 \`\`\``,
-                    answer: `1. ISP1 向其 eBGP 邻居 R1 通告路由 192.0.2.0/24 和 198.51.100.0/24。
-2. R1 应用入口路由策略 R1_IN_FROM_ISP1 route-map 来控制从 ISP1 接收到的路由，并设置 community：
-  * 192.0.2.0/24（携带 400:100 community）
-  * 198.51.100.0/24（携带 500:200 community）
-3. 由于这两个网络前缀都只有一条可用路由，R1 将两条路由都选为最佳路由。
-4. R1 应用出口路由策略 R1_OUT_TO_Customer 来控制传播给 Customer 的路由，仅允许携带 400:100 community 的路由被传播：
-  * 192.0.2.0/24（携带 400:100 community）
-5. 因此，Customer 只能接收到 ISP1 宣告的 192.0.2.0/24 路由。`,
+                    answer: `<br>1. ISP1 向其 eBGP 邻居 R1 通告路由：
+&nbsp;&nbsp;&nbsp;&nbsp;* 192.0.2.0/24
+&nbsp;&nbsp;&nbsp;&nbsp;* 198.51.100.0/24
+<br>2. R1 应用入口路由策略 R1_IN_FROM_ISP1 route-map 来控制从 ISP1 接收到的路由，并设置 community：
+&nbsp;&nbsp;&nbsp;&nbsp;* 192.0.2.0/24（携带 400:100 community）
+&nbsp;&nbsp;&nbsp;&nbsp;* 198.51.100.0/24（携带 500:200 community）
+<br>3. 由于这两个网络前缀都只有一条可用路由，R1 将两条路由都选为最佳路由。
+<br>4. R1 应用出口路由策略 R1_OUT_TO_Customer 来控制传播给 Customer 的路由，仅允许携带 400:100 community 的路由被传播：
+&nbsp;&nbsp;&nbsp;&nbsp;* 192.0.2.0/24（携带 400:100 community）
+<br>5. 因此，Customer 只能接收到 ISP1 宣告的 192.0.2.0/24 路由。`,
                     configSubspec: ``,
                     lineSubspec: ``,
                     configSubspecTrans: ``,
@@ -6235,15 +6225,12 @@ option3: [yes]
    match ip address prefix-list other_network
 -  set community 400:100 additive
 \`\`\``,
-                    answer: `三个选项都涉及删除整行配置，因此我们根据配置行子规约进行分析。
-
-<b>选项 1：</b>
+                    answer: `<br>三个选项都涉及删除整行配置，因此我们根据配置行子规约进行分析。
+<br><b>选项 1：</b>
 待删除的配置行具有非空的配置行子规约，这表示该配置行与先前验证通过的网络规约相关，不能随意删除。因此删除它可能会导致配置不再满足先前通过验证的网络规约。
-
-<b>选项 2：</b>
+<br><b>选项 2：</b>
 待删除的配置行具有空的配置行子规约，说明该配置行与先前验证通过的网络规约无关，因此可以安全删除。
-
-<b>选项 3：</b>
+<br><b>选项 3：</b>
 同样，待删除的配置行具有空的配置行子规约，说明该配置行与先前验证通过的网络规约无关，因此可以安全删除。`,
                     configSubspec: `Config-Level Subspecs
 ====================
@@ -7046,15 +7033,12 @@ option3: [yes]
   route-map R1_OUT_TO_ISP1 deny 10
    match community 500200
 \`\`\``,
-                    answer: `选项 1 涉及删除整行配置，因此我们根据配置行子规约进行分析。选项 2 和选项 3 涉及修改单一的配置域，因此我们根据配置域子规约进行分析。
-
-<b>选项 1：</b>
+                    answer: `<br>选项 1 涉及删除整行配置，因此我们根据配置行子规约进行分析。选项 2 和选项 3 涉及修改单一的配置域，因此我们根据配置域子规约进行分析。
+<br><b>选项 1：</b>
 待删除的配置行具有非空的配置行子规约，这表明该配置行与先前验证通过的网络规约相关，因此删除它可能会导致配置不再满足先前验证通过的网络规约。
-
-<b>选项 2：</b>
+<br><b>选项 2：</b>
 待修改的 community-list community 配置域对应的配置域子规约是 “community 应配置为 400:100”，修改后为 “500:200”，超过了该配置域子规约的范围，因此修改它可能会导致配置不再满足先前验证通过的网络规约。
-
-<b>选项 3：</b>
+<br><b>选项 3：</b>
 待修改的 community-list action 配置域对应的配置域子规约是 “permit”，修改后为 “deny”，超过了该配置域子规约的范围，因此修改它可能会导致配置不再满足先前验证通过的网络规约。`,
                     configSubspec: `Config-Level Subspecs
 ====================
@@ -7929,15 +7913,12 @@ option3: [yes]
 -  set as-path prepend [200]
 +  set as-path prepend [100]
 \`\`\``,
-                    answer: `三个选项都涉及修改单一的配置域，因此我们根据配置域子规约进行分析。
-
-<b>选项 1：</b>
+                    answer: `<br>三个选项都涉及修改单一的配置域，因此我们根据配置域子规约进行分析。
+<br><b>选项 1：</b>
 待修改的 community-list community 配置域对应的配置域子规约是 “community 应配置为 500:200”,修改后为 “400:100”，超过了该配置域子规约的范围，因此修改它可能会导致配置不再满足先前验证通过的网络规约。
-
-<b>选项 2：</b>
+<br><b>选项 2：</b>
 待修改的延长 AS-path 配置域对应的配置域子规约是 “AS-path 应延长 1”，修改后为 “200 100（AS-path 延长 2）”，超过了该配置域子规约的范围，因此修改它可能会导致配置不再满足先前验证通过的网络规约。
-
-<b>选项 3：</b>
+<br><b>选项 3：</b>
 待修改的延长 AS-path 配置域对应的配置域子规约是 “AS-path 应延长 1”，修改后为 “100（AS-path 延长 1）”，在该配置域子规约的范围内，因此修改后配置仍可继续满足先前验证通过的网络规约。`,
                     configSubspec: `Config-Level Subspecs
 ====================
@@ -8759,19 +8740,16 @@ option3: [yes]
   route-map R3_IN_FROM_Customer deny 10
    match ip address prefix-list private_ips
 \`\`\``,
-                    answer: `选项 1 和选项 2 涉及修改单一的配置域，因此我们根据配置域子规约进行分析。选项 3 涉及修改多个配置域，因此我们根据配置行子规约进行分析。
-
-<b>选项 1：</b>
+                    answer: `<br>选项 1 和选项 2 涉及修改单一的配置域，因此我们根据配置域子规约进行分析。选项 3 涉及修改多个配置域，因此我们根据配置行子规约进行分析。
+<br><b>选项 1：</b>
 待修改的 prefix-list network prefix 配置域对应的配置域子规约是 “基础网络前缀应包含 192.168.128.0/23 （由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成）”，修改后为 “192.168.128.0/24（没有包含 192.168.129.0/24）”，超过了该配置域子规约的范围，因此修改它可能会导致配置不再满足先前验证通过的网络规约。
-
-<b>选项 2：</b>
+<br><b>选项 2：</b>
 待修改的 prefix-list le range 配置域对应的配置域子规约是 “最大 (le) 前缀长度范围为 24~32”，修改后为 “le 24”，在该配置域子规约的范围内，因此修改后配置仍可继续满足先前验证通过的网络规约。
-
-<b>选项 3：</b>
+<br><b>选项 3：</b>
 待修改的 prefix-list 配置行对应的配置行子规约是 “permit AND 基础网络前缀应包含 192.168.128.0/23（由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成）AND 最小（ge）前缀长度范围为 0~24 AND 最大（le）前缀长度范围为 24~32 AND 最小（ge）与最大（le）前缀长度 >= 基础网络前缀长度”，其中：
-  * 待修改的 prefix-list network prefix 配置域对应的局部约束是 “基础网络前缀应包含 192.168.128.0/23（由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成）”，修改为 “192.168.128.0/23”，在该配置行子规约的范围内。
-  * 待修改的 prefix-list ge range 配置域对应的局部约束是 “最大（ge）前缀长度范围为 0~24 AND 最小（ge）前缀长度 >= 基础网络前缀长度”，修改为 “ge 23”，在配置行子规约的范围内。
-  * 待修改的 prefix-list le range 配置域对应的局部约束是 “最小（le）前缀长度范围为 24~32 AND 最大（le）前缀长度 >= 基础网络前缀长度”，修改为 “le 28”，在配置行子规约的范围内。
+&nbsp;&nbsp;&nbsp;&nbsp;* 待修改的 prefix-list network prefix 配置域对应的局部约束是 “基础网络前缀应包含 192.168.128.0/23（由 192.168.128.0/24 和 192.168.129.0/24 汇聚而成）”，修改为 “192.168.128.0/23”，在该配置行子规约的范围内。
+&nbsp;&nbsp;&nbsp;&nbsp;* 待修改的 prefix-list ge range 配置域对应的局部约束是 “最大（ge）前缀长度范围为 0~24 AND 最小（ge）前缀长度 >= 基础网络前缀长度”，修改为 “ge 23”，在配置行子规约的范围内。
+&nbsp;&nbsp;&nbsp;&nbsp;* 待修改的 prefix-list le range 配置域对应的局部约束是 “最小（le）前缀长度范围为 24~32 AND 最大（le）前缀长度 >= 基础网络前缀长度”，修改为 “le 28”，在配置行子规约的范围内。
 因此修改后配置仍可继续满足先前验证通过的网络规约。`,
                     configSubspec: `Config-Level Subspecs
 ====================
@@ -11045,40 +11023,54 @@ other_network
             return true;
         }
 
-        // 格式化解析内容，支持代码块和加粗文本
+        // 格式化解析内容，使用 note-instruction 的格式（每行一个 instruction-line）
         function formatExplanation(explanation) {
             if (!explanation) return '';
             
             // 将内容按行分割
-            const lines = explanation.split('\n');
+            let lines = explanation.split('\n');
+            
+            // 只移除开头和末尾的空白行，保留中间的空白行（用于排版）
+            while (lines.length > 0 && lines[0].trim() === '') {
+                lines.shift();
+            }
+            while (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+                lines.pop();
+            }
+            
+            if (lines.length === 0) return '';
+            
             let result = '';
             let inCodeBlock = false;
+            let codeBlockContent = '';
             
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 
                 if (line.trim() === '```') {
                     if (inCodeBlock) {
-                        result += '</pre>';
+                        // 结束代码块，将代码块内容作为一个 instruction-line
+                        result += `<div class="instruction-line"><pre style="margin: 0; padding: 0; background: transparent; border: none; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; white-space: pre-wrap;">${codeBlockContent}</pre></div>`;
+                        codeBlockContent = '';
                         inCodeBlock = false;
                     } else {
-                        result += '<pre class="explanation-code">';
                         inCodeBlock = true;
                     }
                 } else if (inCodeBlock) {
-                    result += line + '\n';
+                    codeBlockContent += (codeBlockContent ? '\n' : '') + line;
                 } else if (line.trim() === '') {
-                    result += '<br>';
+                    // 空行，跳过（不添加任何内容）
+                    continue;
                 } else {
-                    // 处理加粗文本 **text**
+                    // 处理加粗文本 **text**，每行作为一个 instruction-line
                     let processedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    result += '<p>' + processedLine + '</p>';
+                    result += `<div class="instruction-line">${processedLine}</div>`;
                 }
             }
             
             // 如果代码块没有正确关闭，手动关闭
-            if (inCodeBlock) {
-                result += '</pre>';
+            if (inCodeBlock && codeBlockContent) {
+                result += `<div class="instruction-line"><pre style="margin: 0; padding: 0; background: transparent; border: none; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; white-space: pre-wrap;">${codeBlockContent}</pre></div>`;
             }
             
             return result;
@@ -11257,11 +11249,9 @@ other_network
                                 </div>
                                 
                                 <!-- Answer Explanation -->
-                                <div class="answer-explanation">
-                                    <h4>${texts.answerExplanation}</h4>
-                                    <div class="explanation-content">
-                                        ${formatExplanation(question.answer)}
-                                    </div>
+                                <div class="question-instruction note-instruction">
+                                    <div class="instruction-line" style="font-weight: bold; margin-bottom: 8px; color: #667eea;">${texts.answerExplanation}</div>
+                                    ${formatExplanation(question.answer)}
                                 </div>
                             </div>
                         </div>
@@ -11476,8 +11466,8 @@ other_network
                                 `;
                             }).join('')}
                         </div>
-                        <div class="explanation-content">
-                            <h5>Explanation</h5>
+                        <div class="question-instruction note-instruction" style="margin-top: 20px;">
+                            <div class="instruction-line" style="font-weight: bold; margin-bottom: 8px; color: #667eea;">Explanation</div>
                             ${formatExplanation(question.answer)}
                         </div>
                     </div>
