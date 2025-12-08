@@ -739,6 +739,17 @@
         }
 
         function processCourseraConfigLine(line, categorizedTerms, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, configSubspecTransData, lineSubspecTransData) {
+            // HTML 转义函数，用于转义 HTML 属性值中的特殊字符
+            function escapeHtmlForAttribute(html) {
+                if (!html) return '';
+                return html
+                    .replace(/&/g, '&amp;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+            }
+            
             let processedLine = line;
             
             // 处理subspec
@@ -786,6 +797,9 @@
                         tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
                     }
                     
+                    // 转义 tooltipContent 以便安全地插入到 HTML 属性中
+                    const escapedTooltipContent = escapeHtmlForAttribute(tooltipContent);
+                    
                     // 判断是 line-level 还是 config-level subspec
                     let cssClass = "config-field";
                     let isEmpty = (subspec === 'empty');
@@ -798,7 +812,7 @@
                         cssClass += " empty-subspec";
                     }
                     
-                    return `<span class="${cssClass}" data-subspec="${tooltipContent}" data-subspec-name="${subspecName}">${fieldName}</span>`;
+                    return `<span class="${cssClass}" data-subspec="${escapedTooltipContent}" data-subspec-name="${subspecName}">${fieldName}</span>`;
                 });
             }
             
@@ -887,11 +901,18 @@
                 placeholderCounter++;
                 return placeholder;
             });
-            processedLine = processedLine.replace(/\bseq\s+(\d+)\b/g, 'seq <span class="highlight-number">$1</span>');
-            processedLine = processedLine.replace(/\b(ge|le|eq)\s+(\d+)\b/g, '$1 <span class="highlight-number">$2</span>');
+            // 数字高亮模式 - 保留原始空格数量
+            processedLine = processedLine.replace(/\bseq(\s+)(\d+)\b/g, (match, spaces, number) => {
+                return `seq${spaces}<span class="highlight-number">${number}</span>`;
+            });
+            processedLine = processedLine.replace(/\b(ge|le|eq)(\s+)(\d+)\b/g, (match, op, spaces, number) => {
+                return `${op}${spaces}<span class="highlight-number">${number}</span>`;
+            });
             processedLine = processedLine.replace(/\b(\d+\.\d+\.\d+\.\d+)\/(\d+)\b/g, '<span class="highlight-number">$1</span>/<span class="highlight-number">$2</span>');
             processedLine = processedLine.replace(/\b(\d+):(\d+)\b/g, '<span class="highlight-number">$1</span>:<span class="highlight-number">$2</span>');
-            processedLine = processedLine.replace(/\b(permit|deny)\s+(\d+)\b/g, '$1 <span class="highlight-number">$2</span>');
+            processedLine = processedLine.replace(/\b(permit|deny)(\s+)(\d+)\b/g, (match, op, spaces, number) => {
+                return `${op}${spaces}<span class="highlight-number">${number}</span>`;
+            });
             for (const [placeholder, original] of Object.entries(subspecPlaceholders)) {
                 processedLine = processedLine.replace(placeholder, original);
             }
@@ -996,6 +1017,17 @@
         // 处理 options 文本，支持配置引用和 subspec
         // 只处理 [text](subspec) 格式，不处理单纯的 []
         function processOptionText(text, subspecData, configSubspecData, lineSubspecData, lineSubspecNames, showSubspecs, configSubspecTransData, lineSubspecTransData) {
+            // HTML 转义函数，用于转义 HTML 属性值中的特殊字符
+            function escapeHtmlForAttribute(html) {
+                if (!html) return '';
+                return html
+                    .replace(/&/g, '&amp;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+            }
+            
             // 先处理配置引用
             let processed = processConfigReferences(text);
             
@@ -1089,6 +1121,9 @@
                                 tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
                             }
                             
+                            // 转义 tooltipContent 以便安全地插入到 HTML 属性中
+                            const escapedTooltipContent = escapeHtmlForAttribute(tooltipContent);
+                            
                             // 判断是 line-level 还是 config-level subspec
                             let cssClass = "config-field";
                             let isEmpty = (subspec === 'empty');
@@ -1101,7 +1136,7 @@
                                 cssClass += " empty-subspec";
                             }
                             
-                            const replacement = `<span class="${cssClass}" data-subspec="${tooltipContent}" data-subspec-name="${subspecName}">${fieldName}</span>`;
+                            const replacement = `<span class="${cssClass}" data-subspec="${escapedTooltipContent}" data-subspec-name="${subspecName}">${fieldName}</span>`;
                             result = result.substring(0, startIndex) + replacement + result.substring(endIndex + 1);
                             lastIndex = startIndex - 1;
                             continue;
