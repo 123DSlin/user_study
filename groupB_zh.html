@@ -3813,7 +3813,7 @@ option2: [yes]
 option3: [yes]
 \`\`\`diff
   @@ R1 Configuration 17,17 @@
-- [ip community-list](Config_r1_CommunityList_500200__Line1) 500200 [permit](Config_r1_CommunityList_500200__Line1__exact_community_500_200_action) [500:200](Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community)
+- [ip community-list](Config_r1_CommunityList_500200__Line1) 500200 [[permit](Config_r1_CommunityList_500200__Line1__exact_community_500_200_action)] [500:200](Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community)
 + [ip community-list]<> 500200 [[deny]<>]   [500:200]<>
 <br>
   @@ R1 Configuration 29,30 @@
@@ -4715,7 +4715,7 @@ option2: [no]
 \`\`\`diff
   @@ R1 Configuration 15,15 @@
 - [ip community-list](Config_r1_CommunityList_400100__Line1) 400100 [[permit](Config_r1_CommunityList_400100__Line1__exact_community_400_100_action)] [400:100](Config_r1_CommunityList_400100__Line1__exact_community_400_100_400_100_community)
-+ [ip community-list]<> 400100 [[deny]<>]   [500:200]<>
++ [ip community-list]<> 400100 [[deny]<>]   [400:100]<>
 <br>
   @@ R1 Configuration 36,37 @@
   route-map R1_OUT_TO_R3 deny 10
@@ -7395,7 +7395,7 @@ option2: [yes]
 option3: [yes]
 \`\`\`diff
   @@ R1 Configuration 17,17 @@
-- [ip community-list](Config_r1_CommunityList_500200__Line1) 500200 [permit](Config_r1_CommunityList_500200__Line1__exact_community_500_200_action) [500:200](Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community)
+- [ip community-list](Config_r1_CommunityList_500200__Line1) 500200 [[permit](Config_r1_CommunityList_500200__Line1__exact_community_500_200_action)] [500:200](Config_r1_CommunityList_500200__Line1__exact_community_500_200_500_200_community)
 + [ip community-list]<> 500200 [[deny]<>]   [500:200]<>
 <br>
   @@ R1 Configuration 29,30 @@
@@ -8308,7 +8308,7 @@ option2: [no]
 \`\`\`diff
   @@ R1 Configuration 15,15 @@
 - [ip community-list](Config_r1_CommunityList_400100__Line1) 400100 [[permit](Config_r1_CommunityList_400100__Line1__exact_community_400_100_action)] [400:100](Config_r1_CommunityList_400100__Line1__exact_community_400_100_400_100_community)
-+ [ip community-list]<> 400100 [[deny]<>]   [500:200]<>
++ [ip community-list]<> 400100 [[deny]<>]   [400:100]<>
 <br>
   @@ R1 Configuration 36,37 @@
   route-map R1_OUT_TO_R3 deny 10
