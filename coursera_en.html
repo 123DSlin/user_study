@@ -157,20 +157,19 @@
             transition: all 0.3s ease;
         }
 
-        .option-item:hover {
-            border-color: #667eea;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
-        }
-
         .option-item input[type="checkbox"] {
             margin-right: 15px;
             transform: scale(1.2);
             accent-color: #667eea;
+            cursor: pointer;
         }
 
-        .option-item label {
+        .option-item input[type="checkbox"]:hover {
+            transform: scale(1.3);
+        }
+
+        .option-item .option-content-wrapper {
             flex: 1;
-            cursor: pointer;
             font-family: 'Times New Roman', Times, serif;
             font-size: 17px;
             font-weight: 525;
@@ -688,9 +687,9 @@
                 return `
                     <div class="option-item">
                         <input type="checkbox" id="${optionId}" name="${questionId}-options" value="option${optIdx}">
-                        <label for="${optionId}">
+                        <div class="option-content-wrapper">
                             <div class="${contentClass}">${optionContent}</div>
-                        </label>
+                        </div>
                     </div>
                 `;
             }).join('');
