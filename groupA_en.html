@@ -493,6 +493,16 @@
             border-radius: 2px;
         }
 
+        /* Missing subspec (not found in subspec files) 亮黄色 */
+        .config-field.missing-subspec {
+            background: rgba(255, 255, 0, 0.85);
+        }
+
+        /* Missing line-level subspec 亮黄色 */
+        .config-field.line-level.missing-subspec {
+            background: rgba(255, 255, 0, 0.85);
+        }
+
         /* Empty field-level subspec 更淡的蓝色 */
         .config-field.empty-subspec {
             background: rgba(220, 240, 255, 0.85);
@@ -513,6 +523,16 @@
         .config-field.line-level:hover {
             background: #DDB5E3;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Missing subspec hover 效果 */
+        .config-field.missing-subspec:hover {
+            background: rgba(255, 255, 100, 0.95);
+        }
+
+        /* Missing line-level subspec hover 效果 */
+        .config-field.line-level.missing-subspec:hover {
+            background: rgba(255, 255, 100, 0.95);
         }
 
         /* Empty field-level subspec hover 效果 */
@@ -11092,7 +11112,9 @@ isp2_network
                             const subspecName = result.substring(bracketParenIndex + 2, endIndex);
                             
                             // 处理 subspec
-                            const subspec = subspecData[subspecName] || 'empty';
+                            // 检查 subspecName 是否真的存在于 subspecData 中
+                            const isMissing = !(subspecName in subspecData);
+                            const subspec = isMissing ? 'empty' : (subspecData[subspecName] || 'empty');
                             let displaySubspec;
                             
                             // 判断是config-level还是line-level subspec
@@ -11129,9 +11151,16 @@ isp2_network
                             }
                             
                             // 构建完整的tooltip内容
-                            let tooltipContent = displaySubspec;
-                            if (subspecTrans) {
-                                tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
+                            let tooltipContent;
+                            if (isMissing) {
+                                // 如果 subspec 不存在，显示 "none" 和 "No subspec found"
+                                const missingText = currentLanguage === 'zh' ? '没有找到子规约' : 'No subspec found';
+                                tooltipContent = missingText + '<br>─────────────────────<br>none';
+                            } else {
+                                tooltipContent = displaySubspec;
+                                if (subspecTrans) {
+                                    tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
+                                }
                             }
                             
                             // 转义 tooltipContent 以便安全地插入到 HTML 属性中
@@ -11145,7 +11174,11 @@ isp2_network
                                 cssClass += " line-level";
                             }
                             
-                            if (isEmpty) {
+                            if (isMissing) {
+                                // 如果 subspec 根本不存在，使用 missing-subspec 类（亮黄色）
+                                cssClass += " missing-subspec";
+                            } else if (isEmpty) {
+                                // 如果 subspec 存在但值为 'empty'，使用 empty-subspec 类
                                 cssClass += " empty-subspec";
                             }
                             
@@ -11777,7 +11810,9 @@ isp2_network
             } else {
                 // 显示subspec
                 processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, fieldName, subspecName) => {
-                    const subspec = subspecData[subspecName] || 'empty';
+                    // 检查 subspecName 是否真的存在于 subspecData 中
+                    const isMissing = !(subspecName in subspecData);
+                    const subspec = isMissing ? 'empty' : (subspecData[subspecName] || 'empty');
                     let displaySubspec;
                     
                     // 判断是config-level还是line-level subspec
@@ -11814,9 +11849,16 @@ isp2_network
                     }
                     
                     // 构建完整的tooltip内容
-                    let tooltipContent = displaySubspec;
-                    if (subspecTrans) {
-                        tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
+                    let tooltipContent;
+                    if (isMissing) {
+                        // 如果 subspec 不存在，显示 "none" 和 "No subspec found"
+                        const missingText = currentLanguage === 'zh' ? '没有找到子规约' : 'No subspec found';
+                        tooltipContent = missingText + '<br>─────────────────────<br>none';
+                    } else {
+                        tooltipContent = displaySubspec;
+                        if (subspecTrans) {
+                            tooltipContent = subspecTrans + '<br>─────────────────────<br>' + displaySubspec;
+                        }
                     }
                     
                     // 转义 tooltipContent 以便安全地插入到 HTML 属性中
@@ -11830,7 +11872,11 @@ isp2_network
                         cssClass += " line-level";
                     }
                     
-                    if (isEmpty) {
+                    if (isMissing) {
+                        // 如果 subspec 根本不存在，使用 missing-subspec 类（亮黄色）
+                        cssClass += " missing-subspec";
+                    } else if (isEmpty) {
+                        // 如果 subspec 存在但值为 'empty'，使用 empty-subspec 类
                         cssClass += " empty-subspec";
                     }
                     
