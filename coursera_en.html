@@ -583,6 +583,9 @@
             
             // Reload page content
             showCourseraPage();
+            
+            // Update config reference tooltips
+            updateConfigReferenceTooltips();
         }
 
         // 解析 subspec 内容的辅助函数
@@ -1008,17 +1011,47 @@
             const patternWithRouter = /@@\s+(R\d+)\s+Configuration\s+(\d+(?:,\d+)*)\s+@@/g;
             const patternWithoutRouter = /@@\s+Configuration\s+(\d+(?:,\d+)*)\s+@@/g;
             
+            // 根据当前语言设置提示文本
+            const isChinese = currentLanguage === 'zh';
+            
             // 先处理带路由器前缀的
             text = text.replace(patternWithRouter, (match, router, lineRange) => {
-                return `<span class="config-reference" data-router="${router}" data-lines="${lineRange}" title="Click to highlight ${router} Configuration lines ${lineRange}">@@ ${router} Configuration ${lineRange} @@</span>`;
+                const title = isChinese ? 
+                    `点击高亮 ${router} 配置行 ${lineRange}` : 
+                    `Click to highlight ${router} Configuration lines ${lineRange}`;
+                return `<span class="config-reference" data-router="${router}" data-lines="${lineRange}" title="${title}">@@ ${router} Configuration ${lineRange} @@</span>`;
             });
             
             // 再处理不带路由器前缀的
             text = text.replace(patternWithoutRouter, (match, lineRange) => {
-                return `<span class="config-reference" data-lines="${lineRange}" title="Click to highlight Configuration lines ${lineRange}">@@ Configuration ${lineRange} @@</span>`;
+                const title = isChinese ? 
+                    `点击高亮配置行 ${lineRange}` : 
+                    `Click to highlight Configuration lines ${lineRange}`;
+                return `<span class="config-reference" data-lines="${lineRange}" title="${title}">@@ Configuration ${lineRange} @@</span>`;
             });
             
             return text;
+        }
+        
+        // 更新配置引用的提示文本（用于语言切换时）
+        function updateConfigReferenceTooltips() {
+            const configReferences = document.querySelectorAll('.config-reference');
+            const isChinese = currentLanguage === 'zh';
+            configReferences.forEach(ref => {
+                const router = ref.getAttribute('data-router');
+                const lines = ref.getAttribute('data-lines');
+                if (router) {
+                    const title = isChinese ? 
+                        `点击高亮 ${router} 配置行 ${lines}` : 
+                        `Click to highlight ${router} Configuration lines ${lines}`;
+                    ref.setAttribute('title', title);
+                } else {
+                    const title = isChinese ? 
+                        `点击高亮配置行 ${lines}` : 
+                        `Click to highlight Configuration lines ${lines}`;
+                    ref.setAttribute('title', title);
+                }
+            });
         }
 
         // 解析 subspec 数据（用于 options）

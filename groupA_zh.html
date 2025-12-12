@@ -4665,7 +4665,7 @@ Subspecs (1):
 Line Group: Config_r1_RouteFilterList_isp1_network__Line2
 Subspecs (1):
   1. (>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length) <b>AND</b> <br>(= ((_ extract 31 8) |0_dst-ip|) #xc00002) <b>AND</b> <br>(let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__ip) (bvnot Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__mask)))))) (let ((a!2 (not (or (not Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__action) (not a!1) (not (<= 24 Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end)) (not (>= 24 Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start)))))) (or a!2 (= ((_ extract 31 12) |0_dst-ip|) #xc6336))))
-  1. <span style="color: red;"><b>Cannot be configured as (all other are allowed):</b></span> <br>Action = deny <b>AND</b> <br>Prefix covers 192.0.2.0/24 <b>AND</b> <br>Prefix ge range = 0~24 <b>AND</b> <br>Prefix le range = 24~32 <b>AND</b> <br>Prefix ge/le range >= Prefix length
+  1. Action = permit <b>AND</b> <br>Prefix covers 192.0.2.0/24 <b>AND</b> <br>Prefix ge range = 0~24 <b>AND</b> <br>Prefix le range = 24~32 <b>AND</b> <br>Prefix ge/le range >= Prefix length
 --------------------------------------------------
 
 Line Group: Config_r1_RouteFilterList_isp1_network__Line3
@@ -8517,8 +8517,8 @@ Subspecs (1):
 Line Group: Config_r1_RouteFilterList_isp1_network__Line2
 Subspecs (1):
   1. (>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start 0) <b>AND</b> <br>(<= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start 32) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length) <b>AND</b> <br>(>= Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__length) <b>AND</b> <br>(= ((_ extract 31 8) |0_dst-ip|) #xc00002) <b>AND</b> <br>(let ((a!1 (= (bvnot (bvor (bvnot |0_dst-ip|) (bvnot Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__mask))) (bvnot (bvor (bvnot Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__ip) (bvnot Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__mask)))))) (let ((a!2 (not (or (not Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__action) (not a!1) (not (<= 24 Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_end)) (not (>= 24 Config_r1_RouteFilterList_isp1_network__Line2__192_0_2_0__prefix_range_start)))))) (or a!2 (= ((_ extract 31 12) |0_dst-ip|) #xc6336))))
-  1. <span style="color: red;"><b>Cannot be configured as (all other are allowed):</b></span> <br>Action = deny <b>AND</b> <br>Prefix covers 192.0.2.0/24 <b>AND</b> <br>Prefix ge range = 0~24 <b>AND</b> <br>Prefix le range = 24~32 <b>AND</b> <br>Prefix ge/le range >= Prefix length
-  1. <span style="color: red;"><b>禁止以下配置 (其余配置均允许):</b></span> <br>Action 配置为 deny <b>AND</b> <br>基础网络前缀包含 192.0.2.0/24 <b>AND</b> <br>最小 (ge) 前缀长度范围为 0~24 <b>AND</b> <br>最大 (le) 前缀长度范围为 24~32 <b>AND</b> <br>最小 (ge) 与最大 (le) 前缀长度 >= 基础网络前缀长度
+  1. Action = permit <b>AND</b> <br>Prefix covers 192.0.2.0/24 <b>AND</b> <br>Prefix ge range = 0~24 <b>AND</b> <br>Prefix le range = 24~32 <b>AND</b> <br>Prefix ge/le range >= Prefix length
+  1. Action 应配置为 permit <b>AND</b> <br>基础网络前缀应包含 192.0.2.0/24 <b>AND</b> <br>最小 (ge) 前缀长度范围为 0~24 <b>AND</b> <br>最大 (le) 前缀长度范围为 24~32 <b>AND</b> <br>最小 (ge) 与最大 (le) 前缀长度 >= 基础网络前缀长度
 --------------------------------------------------
 
 Line Group: Config_r1_RouteFilterList_isp1_network__Line3
@@ -10865,7 +10865,7 @@ isp2_network
                     
                     // 提取路由器名称
                     const routerMatch = line.match(/=== (.*?) CONFIG ===/);
-                    const routerName = routerMatch ? routerMatch[1] : `Router ${configs.length + 1}`;
+                    const routerName = routerMatch ? routerMatch[1].trim() : `Router ${configs.length + 1}`;
                     
                     // 开始新的配置
                     currentConfig = {
@@ -10965,12 +10965,34 @@ isp2_network
         }
 
         // 格式化diff内容，添加颜色高亮
-        // 处理配置引用，将 @@ R1 Configuration 2,4 @@ 转换为可交互元素
+        // 处理配置引用，将 @@ R1 Configuration 2,4 @@ 或 @@ Configuration 2,4 @@ 转换为可交互元素
         function processConfigReferences(text) {
-            const pattern = /@@\s+(R\d+)\s+Configuration\s+(\d+,\d+)\s+@@/g;
-            return text.replace(pattern, (match, router, lineRange) => {
-                return `<span class="config-reference" data-router="${router}" data-lines="${lineRange}" title="Click to highlight ${router} Configuration lines ${lineRange}">@@ ${router} Configuration ${lineRange} @@</span>`;
+            // 支持两种格式：
+            // 1. @@ R1 Configuration 2,4 @@ (带路由器前缀)
+            // 2. @@ Configuration 2,4 @@ (不带路由器前缀)
+            const patternWithRouter = /@@\s+(R\d+)\s+Configuration\s+(\d+(?:,\d+)*)\s+@@/g;
+            const patternWithoutRouter = /@@\s+Configuration\s+(\d+(?:,\d+)*)\s+@@/g;
+            
+            // 根据当前语言设置提示文本
+            const isChinese = currentLanguage === 'zh';
+            
+            // 先处理带路由器前缀的
+            text = text.replace(patternWithRouter, (match, router, lineRange) => {
+                const title = isChinese ? 
+                    `点击高亮 ${router} 配置行 ${lineRange}` : 
+                    `Click to highlight ${router} Configuration lines ${lineRange}`;
+                return `<span class="config-reference" data-router="${router}" data-lines="${lineRange}" title="${title}">@@ ${router} Configuration ${lineRange} @@</span>`;
             });
+            
+            // 再处理不带路由器前缀的
+            text = text.replace(patternWithoutRouter, (match, lineRange) => {
+                const title = isChinese ? 
+                    `点击高亮配置行 ${lineRange}` : 
+                    `Click to highlight Configuration lines ${lineRange}`;
+                return `<span class="config-reference" data-lines="${lineRange}" title="${title}">@@ Configuration ${lineRange} @@</span>`;
+            });
+            
+            return text;
         }
 
         // 解析 subspec 数据（用于 options）
@@ -12214,15 +12236,24 @@ isp2_network
                 
                 // 根据当前语言和状态设置提示文本
                 const isChinese = currentLanguage === 'zh';
-                if (isActive) {
+                if (router) {
+                    // 带路由器前缀的情况
+                    if (isActive) {
+                        const title = isChinese ? 
+                            `点击清除 ${router} 配置行 ${lines} 的高亮` : 
+                            `Click to clear the highlight of ${router} Configuration lines ${lines}`;
+                        ref.setAttribute('title', title);
+                    } else {
+                        const title = isChinese ? 
+                            `点击高亮 ${router} 配置行 ${lines}` : 
+                            `Click to highlight ${router} Configuration lines ${lines}`;
+                        ref.setAttribute('title', title);
+                    }
+                } else if (lines) {
+                    // 不带路由器前缀的情况
                     const title = isChinese ? 
-                        `点击清除 ${router} 配置行 ${lines} 的高亮` : 
-                        `Click to clear the highlight of ${router} Configuration lines ${lines}`;
-                    ref.setAttribute('title', title);
-                } else {
-                    const title = isChinese ? 
-                        `点击高亮 ${router} 配置行 ${lines}` : 
-                        `Click to highlight ${router} Configuration lines ${lines}`;
+                        `点击高亮配置行 ${lines}` : 
+                        `Click to highlight Configuration lines ${lines}`;
                     ref.setAttribute('title', title);
                 }
             });
@@ -12582,6 +12613,8 @@ isp2_network
                 } else {
                     // 处理加粗文本 **text**，每行作为一个 instruction-line
                     let processedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    // 处理配置引用 @@ Rx Configuration j,k @@ 或 @@ Configuration j,k @@
+                    processedLine = processConfigReferences(processedLine);
                     result += `<div class="instruction-line">${processedLine}</div>`;
                 }
             }
@@ -12905,6 +12938,9 @@ isp2_network
             // Initialize scroll detection for answer page
             initScrollDetection();
             
+            // Update config reference tooltips for answer page
+            updateConfigReferenceTooltips();
+            
             // 滚动到页面顶部
             window.scrollTo(0, 0);
         }
@@ -12937,6 +12973,71 @@ isp2_network
             removeHoverEvents();
             // Add subspec tooltip events (always show subspecs in answer pages)
             addHoverEvents();
+            
+            // Add config reference click listeners for answer pages
+            // In answer pages, we only need highlighting functionality, no option selection
+            const configReferences = document.querySelectorAll('.config-reference');
+            configReferences.forEach(ref => {
+                // Remove existing listeners to avoid duplicates
+                const newRef = ref.cloneNode(true);
+                ref.parentNode.replaceChild(newRef, ref);
+                
+                newRef.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const router = this.getAttribute('data-router');
+                    const lines = this.getAttribute('data-lines');
+                    
+                    if (!lines) return;
+                    
+                    // Toggle highlight state
+                    const isHighlighted = this.classList.contains('config-ref-active');
+                    
+                    if (isHighlighted) {
+                        // Remove highlight
+                        this.classList.remove('config-ref-active');
+                        if (router) {
+                            clearConfigLinesHighlight(router, lines);
+                        } else {
+                            // For references without router, clear from all config sections
+                            document.querySelectorAll('.config-section').forEach(section => {
+                                const sectionRouter = section.getAttribute('data-router');
+                                if (sectionRouter) {
+                                    clearConfigLinesHighlight(sectionRouter, lines);
+                                }
+                            });
+                        }
+                    } else {
+                        // Clear all other highlights first (like in question pages)
+                        clearAllHighlights();
+                        // Remove active class from all other config references
+                        document.querySelectorAll('.config-reference').forEach(otherRef => {
+                            otherRef.classList.remove('config-ref-active');
+                        });
+                        
+                        // Add highlight to current reference
+                        this.classList.add('config-ref-active');
+                        if (router) {
+                            highlightConfigLines(router, lines);
+                            // Expand the config section if needed
+                            expandSingleDeviceConfig(router);
+                        } else {
+                            // For references without router, highlight in all config sections
+                            document.querySelectorAll('.config-section').forEach(section => {
+                                const sectionRouter = section.getAttribute('data-router');
+                                if (sectionRouter) {
+                                    highlightConfigLines(sectionRouter, lines);
+                                    expandSingleDeviceConfig(sectionRouter);
+                                }
+                            });
+                        }
+                    }
+                    
+                    // Update tooltip
+                    updateConfigReferenceTooltips();
+                });
+            });
         }
 
         // Hide answer pages and show completion screen
